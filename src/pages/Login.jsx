@@ -3,11 +3,24 @@ import InputField from "../components/InputField";
 import Button from "../components/Button";
 import Footer from "../components/Footer";
 
-const Login = ({ onRegister }) => {
+const Login = ({ onRegister, onLogin }) => {
   const [isRegistering, setIsRegistering] = useState(false);
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
+  // Credenciales fijas de ejemplo
+  const fixedEmail = "Jared";
+  const fixedPassword = "12345678";
+
+  const handleLogin = () => {
+    if (email === fixedEmail && password === fixedPassword) {
+      onLogin(); // Redirige al HomeScreen si las credenciales son correctas
+    } else {
+      setErrorMessage("Correo o contraseña incorrectos.");
+    }
+  };
 
   const handleRegister = () => {
     if (password.length < 8) {
@@ -42,17 +55,14 @@ const Login = ({ onRegister }) => {
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  x-bind:width="size"
-                  x-bind:height="size"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  x-bind:stroke-width="stroke"
+                  strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   width="24"
                   height="24"
-                  strokeWidth="2"
                 >
                   <path d="M15 6l-6 6l6 6"></path>
                 </svg>
@@ -88,8 +98,18 @@ const Login = ({ onRegister }) => {
               </>
             ) : (
               <>
-                <InputField type="email" placeholder="Email" />
-                <InputField type="password" placeholder="Contraseña" />
+                <InputField
+                  type="email"
+                  placeholder="Correo electrónico"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <InputField
+                  type="password"
+                  placeholder="Contraseña"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </>
             )}
           </div>
@@ -106,7 +126,7 @@ const Login = ({ onRegister }) => {
             </div>
           ) : (
             <div className="flex mt-6 mb-2 justify-between">
-              <Button text="Iniciar Sesión" styleType="primary" />
+              <Button text="Iniciar Sesión" styleType="primary" onClick={handleLogin} />
               <Button
                 text="Crear Cuenta"
                 styleType="secondary"

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from "../components/Button";
 import Footer from "../components/Footer";
 
-const CategorySelection = ({ onBack }) => {
+const CategorySelection = ({ onBack, onComplete }) => {
   const categories = [
     "Acción",
     "Comedia",
@@ -37,6 +37,7 @@ const CategorySelection = ({ onBack }) => {
 
   const handleSubmit = () => {
     console.log("Categorías seleccionadas:", selectedCategories);
+    onComplete(); // Redirige al HomeScreen después de seleccionar las categorías
   };
 
   return (
