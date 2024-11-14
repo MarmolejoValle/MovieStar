@@ -1,13 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
 
+const Carousel = ({ items, visibleItems, page, onNext, onPrev }) => {
+  const totalItems = items.length;
+  const totalPages = Math.ceil(totalItems / visibleItems);
+
+  return (
+    <div className="relative flex items-center">
+      <button onClick={onPrev} className="text-white p-2" aria-label="Previous">
+        ◀
+      </button>
+      <div className="overflow-hidden w-full relative">
+        <div
+          className="flex transition-transform duration-500 ease-in-out"
+          style={{
+            transform: `translateX(-${page * (100 / totalPages)}%)`,
+            width: `${(totalItems / visibleItems) * 100}%`,
+          }}
+        >
+          {items.map((item, index) => (
+            <div key={index} className="min-w-[300px] p-2">
+              <img
+                src={item.image}
+                alt={item.title}
+                className="w-full h-auto rounded-lg"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+      <button onClick={onNext} className="text-white p-2" aria-label="Next">
+        ▶
+      </button>
+    </div>
+  );
+};
+
 const HomeScreen = () => {
   const [seriesPage, setSeriesPage] = useState(0);
   const [moviesPage, setMoviesPage] = useState(0);
-  const itemsPerPage = 5; // Número de elementos completos que queremos mostrar por página
-  const visibleNextItem = 1; // Número de elementos parciales visibles en la siguiente página
+  const [visibleItems, setVisibleItems] = useState(5);
 
   const seriesList = [
     { title: "Breaking Bad", image: "/series/breakingbad.png" },
@@ -17,9 +51,6 @@ const HomeScreen = () => {
     { title: "Peaky Blinders", image: "/series/peakyblinders.png" },
     { title: "Friends", image: "/series/friends.png" },
     { title: "Stranger Things", image: "/series/strangerthings.png" },
-    { title: "Dark", image: "/series/dark.png" },
-    { title: "Mindhunter", image: "/series/mindhunter.png" },
-    { title: "Narcos", image: "/series/narcos.png" },
     { title: "Breaking Bad", image: "/series/breakingbad.png" },
     { title: "The Office", image: "/series/theoffice.png" },
     { title: "The Big Bang Theory", image: "/series/bigbang.png" },
@@ -35,36 +66,32 @@ const HomeScreen = () => {
     { title: "Tokyo Drift", image: "/peliculas/tokyodrift.png" },
     { title: "Spider-Man", image: "/peliculas/spiderman.png" },
     { title: "Avengers", image: "/peliculas/avengers.png" },
+    { title: "About Time", image: "/peliculas/abouttime.png" },
+    { title: "Father", image: "/peliculas/father.png" },
+    { title: "Tokyo Drift", image: "/peliculas/tokyodrift.png" },
+    { title: "Spider-Man", image: "/peliculas/spiderman.png" },
+    { title: "Avengers", image: "/peliculas/avengers.png" },
+    { title: "About Time", image: "/peliculas/abouttime.png" },
+    { title: "Father", image: "/peliculas/father.png" },
+    { title: "Tokyo Drift", image: "/peliculas/tokyodrift.png" },
+    { title: "Spider-Man", image: "/peliculas/spiderman.png" },
+    { title: "Avengers", image: "/peliculas/avengers.png" },
   ];
 
-  const handleNextSeries = () => {
-    if (seriesPage < Math.ceil(seriesList.length / (itemsPerPage + visibleNextItem)) - 1) {
-      setSeriesPage(seriesPage + 1);
-    }
-  };
+  useEffect(() => {
+    const handleResize = () => {
+      const itemWidth = 300;
+      const visibleItems = Math.floor((window.innerWidth - 100) / itemWidth);
+      setVisibleItems(visibleItems);
+    };
 
-  const handlePrevSeries = () => {
-    if (seriesPage > 0) {
-      setSeriesPage(seriesPage - 1);
-    }
-  };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
-  const handleNextMovies = () => {
-    if (moviesPage < Math.ceil(moviesList.length / (itemsPerPage + visibleNextItem)) - 1) {
-      setMoviesPage(moviesPage + 1);
-    }
-  };
-
-  const handlePrevMovies = () => {
-    if (moviesPage > 0) {
-      setMoviesPage(moviesPage - 1);
-    }
-  };
-
-  const getTransformValue = (page, itemsCount) => {
-    const itemWidthPercentage = 100 / (itemsPerPage + visibleNextItem);
-    return `translateX(-${page * itemWidthPercentage * (itemsPerPage + visibleNextItem)}%)`;
-  };
+  const totalSeriesPages = Math.ceil(seriesList.length / visibleItems);
+  const totalMoviesPages = Math.ceil(moviesList.length / visibleItems);
 
   return (
     <div className="bg-azulprincipal text-white">
@@ -90,64 +117,28 @@ const HomeScreen = () => {
 
       <div className="px-8">
         <h2 className="text-4xl font-semibold mb-6">Series para ti</h2>
-        <div className="relative flex items-center">
-          <button onClick={handlePrevSeries} className="text-white p-2">
-            ◀
-          </button>
-          <div className="overflow-hidden w-full relative">
-            <div
-              className="flex transition-transform duration-500 ease-in-out"
-              style={{
-                transform: getTransformValue(seriesPage, seriesList.length),
-                width: `${(seriesList.length / (itemsPerPage + visibleNextItem)) * 100}%`,
-              }}
-            >
-              {seriesList.map((serie, index) => (
-                <div key={index} className="min-w-[300px] p-2">
-                  <img
-                    src={serie.image}
-                    alt={serie.title}
-                    className="w-full h-auto rounded-lg"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-          <button onClick={handleNextSeries} className="text-white p-2">
-            ▶
-          </button>
-        </div>
+        <Carousel
+          items={seriesList}
+          visibleItems={visibleItems}
+          page={seriesPage}
+          onNext={() =>
+            setSeriesPage((prev) => (prev + 1 < totalSeriesPages ? prev + 1 : 0))
+          }
+          onPrev={() => setSeriesPage((prev) => (prev - 1 + totalSeriesPages) % totalSeriesPages)}
+        />
       </div>
 
       <div className="px-8 mt-11">
         <h2 className="text-4xl font-semibold mb-6">Películas para ti</h2>
-        <div className="relative flex items-center">
-          <button onClick={handlePrevMovies} className="text-white p-2">
-            ◀
-          </button>
-          <div className="overflow-hidden w-full relative">
-            <div
-              className="flex transition-transform duration-500 ease-in-out"
-              style={{
-                transform: getTransformValue(moviesPage, moviesList.length),
-                width: `${(moviesList.length / (itemsPerPage + visibleNextItem)) * 100}%`,
-              }}
-            >
-              {moviesList.map((movie, index) => (
-                <div key={index} className="min-w-[300px] p-2">
-                  <img
-                    src={movie.image}
-                    alt={movie.title}
-                    className="w-full h-auto rounded-lg"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-          <button onClick={handleNextMovies} className="text-white p-2">
-            ▶
-          </button>
-        </div>
+        <Carousel
+          items={moviesList}
+          visibleItems={visibleItems}
+          page={moviesPage}
+          onNext={() =>
+            setMoviesPage((prev) => (prev + 1 < totalMoviesPages ? prev + 1 : 0))
+          }
+          onPrev={() => setMoviesPage((prev) => (prev - 1 + totalMoviesPages) % totalMoviesPages)}
+        />
       </div>
 
       <Footer />
