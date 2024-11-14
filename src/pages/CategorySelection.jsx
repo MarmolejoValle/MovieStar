@@ -37,7 +37,7 @@ const CategorySelection = ({ onBack, onComplete }) => {
 
   const handleSubmit = () => {
     console.log("Categorías seleccionadas:", selectedCategories);
-    onComplete(); // Redirige al HomeScreen después de seleccionar las categorías
+    onComplete();
   };
 
   return (

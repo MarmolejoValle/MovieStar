@@ -10,6 +10,9 @@ export default {
         'azulprincipal': '#13161A',
         'rojosecundario': '#A62940',
       },
+      fontFamily: {
+        tituloPeliHome: ['Lavishly Yours', 'cursive'],
+      },
     },
   },
   plugins: [],
