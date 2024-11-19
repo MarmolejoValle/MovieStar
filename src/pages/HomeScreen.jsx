@@ -9,8 +9,23 @@ const Carousel = ({ items, visibleItems, page, onNext, onPrev }) => {
 
   return (
     <div className="relative flex items-center">
-      <button onClick={onPrev} className="text-white p-2" aria-label="Previous">
-        ◀
+      <button onClick={onPrev} className="text-white " aria-label="Previous">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          x-bind:width="size"
+          x-bind:height="size"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          x-bind:stroke-width="stroke"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          width="24"
+          height="24"
+          stroke-width="2"
+        >
+          <path d="M15 6l-6 6l6 6"></path>
+        </svg>
       </button>
       <div className="overflow-hidden w-full relative">
         <div
@@ -31,8 +46,23 @@ const Carousel = ({ items, visibleItems, page, onNext, onPrev }) => {
           ))}
         </div>
       </div>
-      <button onClick={onNext} className="text-white p-2" aria-label="Next">
-        ▶
+      <button onClick={onNext} className="text-white" aria-label="Next">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          x-bind:width="size"
+          x-bind:height="size"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          x-bind:stroke-width="stroke"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          width="24"
+          height="24"
+          stroke-width="2"
+        >
+          <path d="M9 6l6 6l-6 6"></path>
+        </svg>
       </button>
     </div>
   );
@@ -115,29 +145,41 @@ const HomeScreen = () => {
         </div>
       </div>
 
-      <div className="px-8">
-        <h2 className="text-4xl font-semibold mb-6">Series para ti</h2>
+      <div className="my-6">
+        <h2 className="text-4xl font-semibold mb-6 ml-8">Series para ti</h2>
         <Carousel
           items={seriesList}
           visibleItems={visibleItems}
           page={seriesPage}
           onNext={() =>
-            setSeriesPage((prev) => (prev + 1 < totalSeriesPages ? prev + 1 : 0))
+            setSeriesPage((prev) =>
+              prev + 1 < totalSeriesPages ? prev + 1 : 0
+            )
           }
-          onPrev={() => setSeriesPage((prev) => (prev - 1 + totalSeriesPages) % totalSeriesPages)}
+          onPrev={() =>
+            setSeriesPage(
+              (prev) => (prev - 1 + totalSeriesPages) % totalSeriesPages
+            )
+          }
         />
       </div>
 
-      <div className="px-8 mt-11">
-        <h2 className="text-4xl font-semibold mb-6">Películas para ti</h2>
+      <div className="my-6">
+        <h2 className="text-4xl font-semibold mb-6 ml-8">Películas para ti</h2>
         <Carousel
           items={moviesList}
           visibleItems={visibleItems}
           page={moviesPage}
           onNext={() =>
-            setMoviesPage((prev) => (prev + 1 < totalMoviesPages ? prev + 1 : 0))
+            setMoviesPage((prev) =>
+              prev + 1 < totalMoviesPages ? prev + 1 : 0
+            )
           }
-          onPrev={() => setMoviesPage((prev) => (prev - 1 + totalMoviesPages) % totalMoviesPages)}
+          onPrev={() =>
+            setMoviesPage(
+              (prev) => (prev - 1 + totalMoviesPages) % totalMoviesPages
+            )
+          }
         />
       </div>
 
