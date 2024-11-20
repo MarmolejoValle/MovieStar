@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { Link } from "react-router-dom";
 
 const Carousel = ({ items, visibleItems, page, onNext, onPrev }) => {
   const totalItems = items.length;
@@ -70,17 +71,31 @@ const Carousel = ({ items, visibleItems, page, onNext, onPrev }) => {
               isDragging ? "transition-none" : ""
             }`}
             style={{
-              transform: `translateX(calc(-${page * (100 / totalPages)}% + ${currentTranslate}px))`,
+              transform: `translateX(calc(-${
+                page * (100 / totalPages)
+              }% + ${currentTranslate}px))`,
               width: `${(totalItems / visibleItems) * 100}%`,
             }}
           >
             {items.map((item, index) => (
               <div key={index} className="min-w-[300px] p-2">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-40 rounded-lg"
-                />
+                <Link
+                  to={`/detalle/${item.title}?image=${encodeURIComponent(
+                    item.image
+                  )}&description=${encodeURIComponent(
+                    item.description
+                  )}&releaseDate=${encodeURIComponent(
+                    item.releaseDate
+                  )}&genre=${encodeURIComponent(
+                    item.genre
+                  )}&rating=${encodeURIComponent(item.rating)}`}
+                >
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-40 rounded-lg"
+                  />
+                </Link>
               </div>
             ))}
           </div>

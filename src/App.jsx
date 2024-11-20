@@ -6,6 +6,7 @@ import HomeScreen from "./pages/HomeScreen";
 import SeriesScreen from "./pages/SeriesScreen";
 import MoviesScreen from "./pages/MoviesScreen";
 import MyLibraryScreen from "./pages/MyLibraryScreen";
+import DetailScreen from "./pages/DetailScreen";
 
 const App = () => {
   const [isRegistered, setIsRegistered] = useState(false);
@@ -41,6 +42,7 @@ const App = () => {
         <Route path="/series" element={<SeriesScreen />} />
         <Route path="/movies" element={<MoviesScreen />} />
         <Route path="/library" element={<MyLibraryScreen />} />
+        <Route path="/detalle/:title" element={<DetailScreen />} /> {/* Ruta dinámica para los detalles */}
       </Routes>
     </Router>
   );
