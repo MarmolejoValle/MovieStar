@@ -10,13 +10,13 @@ const Login = ({ onRegister, onLogin }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  // Credenciales fijas de ejemplo
+  
   const fixedEmail = "Jared";
   const fixedPassword = "12345678";
 
   const handleLogin = () => {
     if (email === fixedEmail && password === fixedPassword) {
-      onLogin(); // Redirige al HomeScreen si las credenciales son correctas
+      onLogin();
     } else {
       setErrorMessage("Correo o contraseña incorrectos.");
     }

@@ -12,6 +12,7 @@ export default {
       },
       fontFamily: {
         tituloPeliHome: ['Lavishly Yours', 'cursive'],
+        tituloPeliHome2: ['Geist Mono', 'normal'],
       },
     },
   },

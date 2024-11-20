@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
@@ -10,22 +11,22 @@ const Navbar = () => {
           className="left-16 h-20 w-auto"
         />
         <div className="text-xl w-2/3 justify-evenly flex space-x-4">
-          <a href="#" className="relative group">
+          <Link to="/" className="relative group">
             Inicio
             <span className="block absolute left-0 -bottom-1 w-full h-0.5 bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out"></span>
-          </a>
-          <a href="#" className="relative group">
+          </Link>
+          <Link to="/series" className="relative group">
             Series
             <span className="block absolute left-0 -bottom-1 w-full h-0.5 bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out"></span>
-          </a>
-          <a href="#" className="relative group">
+          </Link>
+          <Link to="/movies" className="relative group">
             Películas
             <span className="block absolute left-0 -bottom-1 w-full h-0.5 bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out"></span>
-          </a>
-          <a href="#" className="relative group">
+          </Link>
+          <Link to="/library" className="relative group">
             Mi Biblioteca
             <span className="block absolute left-0 -bottom-1 w-full h-0.5 bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out"></span>
-          </a>
+          </Link>
         </div>
       </div>
       <div className="text-white flex w-auto justify-between items-center">

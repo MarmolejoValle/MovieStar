@@ -2,71 +2,7 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
-
-const Carousel = ({ items, visibleItems, page, onNext, onPrev }) => {
-  const totalItems = items.length;
-  const totalPages = Math.ceil(totalItems / visibleItems);
-
-  return (
-    <div className="relative flex items-center">
-      <button onClick={onPrev} className="text-white " aria-label="Previous">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          x-bind:width="size"
-          x-bind:height="size"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          x-bind:stroke-width="stroke"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          width="24"
-          height="24"
-          stroke-width="2"
-        >
-          <path d="M15 6l-6 6l6 6"></path>
-        </svg>
-      </button>
-      <div className="overflow-hidden w-full relative">
-        <div
-          className="flex transition-transform duration-500 ease-in-out"
-          style={{
-            transform: `translateX(-${page * (100 / totalPages)}%)`,
-            width: `${(totalItems / visibleItems) * 100}%`,
-          }}
-        >
-          {items.map((item, index) => (
-            <div key={index} className="min-w-[300px] p-2">
-              <img
-                src={item.image}
-                alt={item.title}
-                className="w-full h-auto rounded-lg"
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-      <button onClick={onNext} className="text-white" aria-label="Next">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          x-bind:width="size"
-          x-bind:height="size"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          x-bind:stroke-width="stroke"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          width="24"
-          height="24"
-          stroke-width="2"
-        >
-          <path d="M9 6l6 6l-6 6"></path>
-        </svg>
-      </button>
-    </div>
-  );
-};
+import Carousel from "../components/Carousel";
 
 const HomeScreen = () => {
   const [seriesPage, setSeriesPage] = useState(0);
@@ -81,21 +17,9 @@ const HomeScreen = () => {
     { title: "Peaky Blinders", image: "/series/peakyblinders.png" },
     { title: "Friends", image: "/series/friends.png" },
     { title: "Stranger Things", image: "/series/strangerthings.png" },
-    { title: "Breaking Bad", image: "/series/breakingbad.png" },
-    { title: "The Office", image: "/series/theoffice.png" },
-    { title: "The Big Bang Theory", image: "/series/bigbang.png" },
-    { title: "Better Call Saul", image: "/series/bettercallsaul.png" },
-    { title: "Peaky Blinders", image: "/series/peakyblinders.png" },
-    { title: "Friends", image: "/series/friends.png" },
-    { title: "Stranger Things", image: "/series/strangerthings.png" },
   ];
 
   const moviesList = [
-    { title: "About Time", image: "/peliculas/abouttime.png" },
-    { title: "Father", image: "/peliculas/father.png" },
-    { title: "Tokyo Drift", image: "/peliculas/tokyodrift.png" },
-    { title: "Spider-Man", image: "/peliculas/spiderman.png" },
-    { title: "Avengers", image: "/peliculas/avengers.png" },
     { title: "About Time", image: "/peliculas/abouttime.png" },
     { title: "Father", image: "/peliculas/father.png" },
     { title: "Tokyo Drift", image: "/peliculas/tokyodrift.png" },
@@ -132,16 +56,8 @@ const HomeScreen = () => {
       >
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-azulprincipal"></div>
         <div className="relative flex flex-col items-start justify-center h-full ml-24">
-          <div className="place-items-center">
-            <h1 className="text-9xl font-tituloPeliHome">your name</h1>
-            <div className="flex w-1/3 justify-between mb-8">
-              <p className="text-lg mt-2">君</p>
-              <p className="text-lg mt-2">の</p>
-              <p className="text-lg mt-2">名</p>
-              <p className="text-lg mt-2">は</p>
-            </div>
-            <Button text="Ver ahora" styleType="secundary" />
-          </div>
+          <h1 className="text-8xl font-tituloPeliHome mb-8">your name</h1>
+          <Button text="Ver ahora" styleType="secundary" />
         </div>
       </div>
 

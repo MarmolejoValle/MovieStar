@@ -22,6 +22,7 @@ const CategorySelection = ({ onBack, onComplete }) => {
   ];
 
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [error, setError] = useState("");
 
   const handleCategoryChange = (category) => {
     if (selectedCategories.includes(category)) {
@@ -36,6 +37,11 @@ const CategorySelection = ({ onBack, onComplete }) => {
   };
 
   const handleSubmit = () => {
+    if (selectedCategories.length !== 5) {
+      setError("Debes seleccionar 5 categorías.");
+      return;
+    }
+    setError("");
     console.log("Categorías seleccionadas:", selectedCategories);
     onComplete();
   };
@@ -92,6 +98,9 @@ const CategorySelection = ({ onBack, onComplete }) => {
               ))}
             </div>
           </div>
+          {error && (
+            <p className="text-red-500 text-lg font-semibold mt-2">{error}</p>
+          )}
           <Button
             text="Crear Cuenta"
             styleType="primary"
