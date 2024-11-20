@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Login from "./pages/Login";
 import CategorySelection from "./pages/CategorySelection";
 import HomeScreen from "./pages/HomeScreen";
@@ -7,7 +12,8 @@ import SeriesScreen from "./pages/SeriesScreen";
 import MoviesScreen from "./pages/MoviesScreen";
 import MyLibraryScreen from "./pages/MyLibraryScreen";
 import DetailScreen from "./pages/DetailScreen";
-import ScrollToTop from "./components/ScrollToTop"; // Asegúrate de ajustar la ruta
+import ScrollToTop from "./components/ScrollToTop";
+import Navbar from "./components/Navbar";
 
 const App = () => {
   const [isRegistered, setIsRegistered] = useState(false);
@@ -25,15 +31,21 @@ const App = () => {
     setIsLoggedIn(true);
   };
 
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
+
   return (
     <Router>
       <ScrollToTop />
+      {isLoggedIn && <Navbar onLogout={handleLogout} />}
       <Routes>
+        <Route path="/" element={<Navigate to="/login" replace />} />
         <Route
           path="/login"
           element={
             isLoggedIn ? (
-              <HomeScreen />
+              <Navigate to="/home" replace />
             ) : isRegistered ? (
               <CategorySelection onBack={handleBack} onComplete={handleLogin} />
             ) : (
@@ -43,12 +55,26 @@ const App = () => {
         />
         <Route
           path="/home"
-          element={isLoggedIn ? <HomeScreen /> : <Login onRegister={handleRegister} onLogin={handleLogin} />}
+          element={isLoggedIn ? <HomeScreen /> : <Navigate to="/" replace />}
         />
-        <Route path="/series" element={<SeriesScreen />} />
-        <Route path="/movies" element={<MoviesScreen />} />
-        <Route path="/library" element={<MyLibraryScreen />} />
-        <Route path="/detalle/:title" element={<DetailScreen />} />
+        <Route
+          path="/series"
+          element={isLoggedIn ? <SeriesScreen /> : <Navigate to="/" replace />}
+        />
+        <Route
+          path="/movies"
+          element={isLoggedIn ? <MoviesScreen /> : <Navigate to="/" replace />}
+        />
+        <Route
+          path="/library"
+          element={
+            isLoggedIn ? <MyLibraryScreen /> : <Navigate to="/" replace />
+          }
+        />
+        <Route
+          path="/detalle/:title"
+          element={isLoggedIn ? <DetailScreen /> : <Navigate to="/" replace />}
+        />
       </Routes>
     </Router>
   );

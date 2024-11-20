@@ -1,19 +1,22 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const Navbar = ({ onLogout }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const navigate = useNavigate(); // Hook para redirigir
+  const navigate = useNavigate();
+  const location = useLocation(); // Hook para obtener la ubicación actual
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
   };
 
   const handleLogout = () => {
-    console.log("Cerrar sesión");
-    onLogout(); // Llama a la función onLogout pasada como prop
-    navigate("/login"); // Redirige a la pantalla de Login después de cerrar sesión
+    console.log("Sesion cerrada");
+    onLogout(); // Cambia el estado global en App
+    navigate("/login", { replace: true }); // Redirige explícitamente al login
   };
+
+  const isActive = (path) => location.pathname === path; // Verifica si la ruta actual coincide
 
   return (
     <nav className="fixed top-0 left-0 w-full px-4 py-2 flex justify-between items-center bg-gradient-to-b from-azulprincipal to-transparent z-50 font-semibold">
@@ -24,21 +27,46 @@ const Navbar = ({ onLogout }) => {
           className="left-16 h-20 w-auto"
         />
         <div className="text-xl w-2/3 justify-evenly flex space-x-4">
+          {/** Botones con animación y estado activo */}
           <Link to="/home" className="relative group">
             Inicio
-            <span className="block absolute left-0 -bottom-1 w-full h-0.5 bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out"></span>
+            <span
+              className={`block absolute left-0 -bottom-1 w-full h-0.5 bg-white transition-transform duration-300 ease-in-out ${
+                isActive("/home")
+                  ? "scale-x-100"
+                  : "scale-x-0 group-hover:scale-x-100"
+              }`}
+            ></span>
           </Link>
           <Link to="/series" className="relative group">
             Series
-            <span className="block absolute left-0 -bottom-1 w-full h-0.5 bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out"></span>
+            <span
+              className={`block absolute left-0 -bottom-1 w-full h-0.5 bg-white transition-transform duration-300 ease-in-out ${
+                isActive("/series")
+                  ? "scale-x-100"
+                  : "scale-x-0 group-hover:scale-x-100"
+              }`}
+            ></span>
           </Link>
           <Link to="/movies" className="relative group">
             Películas
-            <span className="block absolute left-0 -bottom-1 w-full h-0.5 bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out"></span>
+            <span
+              className={`block absolute left-0 -bottom-1 w-full h-0.5 bg-white transition-transform duration-300 ease-in-out ${
+                isActive("/movies")
+                  ? "scale-x-100"
+                  : "scale-x-0 group-hover:scale-x-100"
+              }`}
+            ></span>
           </Link>
           <Link to="/library" className="relative group">
             Mi Biblioteca
-            <span className="block absolute left-0 -bottom-1 w-full h-0.5 bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out"></span>
+            <span
+              className={`block absolute left-0 -bottom-1 w-full h-0.5 bg-white transition-transform duration-300 ease-in-out ${
+                isActive("/library")
+                  ? "scale-x-100"
+                  : "scale-x-0 group-hover:scale-x-100"
+              }`}
+            ></span>
           </Link>
         </div>
       </div>
@@ -77,7 +105,9 @@ const Navbar = ({ onLogout }) => {
             width="24"
             height="24"
             strokeWidth="3"
-            className={`transform transition-transform duration-300 ${isMenuOpen ? "rotate-180" : "rotate-0"}`}
+            className={`transform transition-transform duration-300 ${
+              isMenuOpen ? "rotate-180" : "rotate-0"
+            }`}
           >
             <path d="M6 9l6 6l6 -6"></path>
           </svg>

@@ -23,7 +23,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="mt-6 mx-10 h-px bg-gray-500"></div>
-      <p className="py-4">© 2020 Your Company, Inc. All rights reserved.</p>
+      <p className="py-4">© 2024 MovieStar Inc. All rights reserved.</p>
     </footer>
   );
 };

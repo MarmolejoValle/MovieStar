@@ -1,5 +1,4 @@
 import React from "react";
-import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Carousel from "../components/Carousel";
 
@@ -51,7 +50,6 @@ const MyLibraryScreen = () => {
 
   return (
     <div className="bg-azulprincipal text-white pt-36">
-      <Navbar />
       <div className="flex justify-center items-center mb-10">
         <h2 className="bg-rojosecundario py-5 px-10 rounded-full text-5xl text-center shadow-black shadow-2xl">
           MI BIBLIOTECA

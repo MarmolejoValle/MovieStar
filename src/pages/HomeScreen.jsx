@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
 import Carousel from "../components/Carousel";
@@ -185,7 +184,6 @@ const HomeScreen = () => {
 
   return (
     <div className="bg-azulprincipal text-white">
-      <Navbar />
       <div
         className="relative h-[60vh] bg-cover bg-center"
         style={{ backgroundImage: "url('/peliculas/yourname_background.png')" }}

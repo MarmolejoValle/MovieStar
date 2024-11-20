@@ -1,6 +1,5 @@
 import React from "react";
 import { useParams, useLocation } from "react-router-dom";
-import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 const DetailScreen = () => {
@@ -16,7 +15,6 @@ const DetailScreen = () => {
 
   return (
     <div className="bg-azulprincipal text-white">
-      <Navbar />
       <div className="h-screen w-full mb-36">
         <div
           className="relative h-[75vh] bg-cover bg-center"
