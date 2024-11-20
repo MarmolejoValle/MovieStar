@@ -15,70 +15,142 @@ const SeriesScreen = () => {
 
   const seriesByGenre = {
     drama: [
-      { title: "Breaking Bad", image: "/series/breakingbad.png" },
-      { title: "The Office", image: "/series/theoffice.png" },
-      { title: "The Big Bang Theory", image: "/series/bigbang.png" },
-      { title: "Better Call Saul", image: "/series/bettercallsaul.png" },
-      { title: "Peaky Blinders", image: "/series/peakyblinders.png" },
-      { title: "Friends", image: "/series/friends.png" },
-      { title: "Stranger Things", image: "/series/strangerthings.png" },
-      { title: "Breaking Bad", image: "/series/breakingbad.png" },
-      { title: "The Office", image: "/series/theoffice.png" },
-      { title: "The Big Bang Theory", image: "/series/bigbang.png" },
-      { title: "Better Call Saul", image: "/series/bettercallsaul.png" },
-      { title: "Peaky Blinders", image: "/series/peakyblinders.png" },
-      { title: "Friends", image: "/series/friends.png" },
-      { title: "Stranger Things", image: "/series/strangerthings.png" },
+      {
+        "title": "Breaking Bad",
+        "image": "/series/breakingbad.jpg",
+        "description": "Breaking Bad es una serie dramática que sigue la transformación de Walter White, un profesor de química convertido en narcotraficante, después de ser diagnosticado con cáncer. A medida que se involucra en el mundo de las drogas, su vida  y la de su familia se ven profundamente afectadas. La serie destaca por su narrativa intensa, desarrollo de personajes complejos, y un enfoque en temas como la ambición, la moralidad y la consecuencia de las decisiones. Protagonizada por Bryan Cranston y Aaron Paul, es considerada una de las mejores series de la televisión.",
+        "releaseDate": "2008",
+        "genre": "Drama, Thriller, Crimen",
+        "rating": "+16"
+      },
+      {
+        "title": "Better Call Saul",
+        "image": "/series/bettercallsaul.png",
+        "description": "Better Call Saul es una precuela de Breaking Bad que narra la evolución de Jimmy McGill, un abogado de poca monta que se convierte en el inescrupuloso Saul Goodman. La serie combina drama legal con momentos de humor negro.",
+        "releaseDate": "2015",
+        "genre": "Drama, Crimen",
+        "rating": "+16"
+      },
+      {
+        "title": "Peaky Blinders",
+        "image": "/series/peakyblinders.png",
+        "description": "Peaky Blinders sigue las hazañas de la familia Shelby en el Birmingham de la posguerra. Conocidos por sus trajes elegantes y su brutalidad, los Shelby buscan expandir su imperio mientras enfrentan enemigos y traiciones.",
+        "releaseDate": "2013",
+        "genre": "Drama, Crimen, Histórico",
+        "rating": "+16"
+      },
+      {
+        "title": "Stranger Things",
+        "image": "/series/strangerthings.png",
+        "description": "Stranger Things combina ciencia ficción y nostalgia ochentera en una historia donde un grupo de niños se enfrenta a fenómenos paranormales y monstruos provenientes de otra dimensión, conocida como 'El Otro Lado'.",
+        "releaseDate": "2016",
+        "genre": "Drama, Ciencia Ficción, Misterio",
+        "rating": "+13"
+      }
     ],
     comedy: [
-      { title: "Breaking Bad", image: "/series/breakingbad.png" },
-      { title: "The Office", image: "/series/theoffice.png" },
-      { title: "The Big Bang Theory", image: "/series/bigbang.png" },
-      { title: "Better Call Saul", image: "/series/bettercallsaul.png" },
-      { title: "Peaky Blinders", image: "/series/peakyblinders.png" },
-      { title: "Friends", image: "/series/friends.png" },
-      { title: "Stranger Things", image: "/series/strangerthings.png" },
-      { title: "Breaking Bad", image: "/series/breakingbad.png" },
-      { title: "The Office", image: "/series/theoffice.png" },
-      { title: "The Big Bang Theory", image: "/series/bigbang.png" },
-      { title: "Better Call Saul", image: "/series/bettercallsaul.png" },
-      { title: "Peaky Blinders", image: "/series/peakyblinders.png" },
-      { title: "Friends", image: "/series/friends.png" },
-      { title: "Stranger Things", image: "/series/strangerthings.png" },
+      {
+        "title": "The Office",
+        "image": "/series/theoffice.png",
+        "description": "The Office es una comedia de estilo documental que sigue la vida cotidiana de los empleados de Dunder Mifflin, una empresa de papel. Con momentos incómodos y personajes entrañables, la serie se ha convertido en un clásico moderno.",
+        "releaseDate": "2005",
+        "genre": "Comedia",
+        "rating": "Todo público"
+      },
+      {
+        "title": "The Big Bang Theory",
+        "image": "/series/bigbang.png",
+        "description": "The Big Bang Theory es una comedia que narra las vidas de un grupo de amigos nerds y su interacción con el mundo social, especialmente con Penny, su vecina y opuesta en muchos sentidos.",
+        "releaseDate": "2007",
+        "genre": "Comedia",
+        "rating": "Todo público"
+      },
+      {
+        "title": "Friends",
+        "image": "/series/friends.png",
+        "description": "Friends es una icónica comedia que sigue las vidas de seis amigos en Nueva York. A lo largo de diez temporadas, exploran relaciones, carreras y la complejidad de la amistad adulta.",
+        "releaseDate": "1994",
+        "genre": "Comedia, Romance",
+        "rating": "Todo público"
+      }
     ],
     thriller: [
-      { title: "Breaking Bad", image: "/series/breakingbad.png" },
-      { title: "The Office", image: "/series/theoffice.png" },
-      { title: "The Big Bang Theory", image: "/series/bigbang.png" },
-      { title: "Better Call Saul", image: "/series/bettercallsaul.png" },
-      { title: "Peaky Blinders", image: "/series/peakyblinders.png" },
-      { title: "Friends", image: "/series/friends.png" },
-      { title: "Stranger Things", image: "/series/strangerthings.png" },
-      { title: "Breaking Bad", image: "/series/breakingbad.png" },
-      { title: "The Office", image: "/series/theoffice.png" },
-      { title: "The Big Bang Theory", image: "/series/bigbang.png" },
-      { title: "Better Call Saul", image: "/series/bettercallsaul.png" },
-      { title: "Peaky Blinders", image: "/series/peakyblinders.png" },
-      { title: "Friends", image: "/series/friends.png" },
-      { title: "Stranger Things", image: "/series/strangerthings.png" },
+      {
+        "title": "Breaking Bad",
+        "image": "/series/breakingbad.jpg",
+        "description": "Breaking Bad es una serie dramática que sigue la transformación de Walter White, un profesor de química convertido en narcotraficante, después de ser diagnosticado con cáncer. A medida que se involucra en el mundo de las drogas, su vida  y la de su familia se ven profundamente afectadas. La serie destaca por su narrativa intensa, desarrollo de personajes complejos, y un enfoque en temas como la ambición, la moralidad y la consecuencia de las decisiones. Protagonizada por Bryan Cranston y Aaron Paul, es considerada una de las mejores series de la televisión.",
+        "releaseDate": "2008",
+        "genre": "Drama, Thriller, Crimen",
+        "rating": "+16"
+      },
+      {
+        "title": "Stranger Things",
+        "image": "/series/strangerthings.png",
+        "description": "Stranger Things combina ciencia ficción y nostalgia ochentera en una historia donde un grupo de niños se enfrenta a fenómenos paranormales y monstruos provenientes de otra dimensión, conocida como 'El Otro Lado'.",
+        "releaseDate": "2016",
+        "genre": "Drama, Ciencia Ficción, Misterio",
+        "rating": "+13"
+      }
     ],
   };
 
   const seriesList = [
-    { title: "Breaking Bad", image: "/series/breakingbad.png" },
-    { title: "The Office", image: "/series/theoffice.png" },
-    { title: "The Big Bang Theory", image: "/series/bigbang.png" },
-    { title: "Better Call Saul", image: "/series/bettercallsaul.png" },
-    { title: "Peaky Blinders", image: "/series/peakyblinders.png" },
-    { title: "Friends", image: "/series/friends.png" },
-    { title: "Stranger Things", image: "/series/strangerthings.png" },
-    { title: "Breaking Bad", image: "/series/breakingbad.png" },
-    { title: "The Office", image: "/series/theoffice.png" },
-    { title: "The Big Bang Theory", image: "/series/bigbang.png" },
-    { title: "Better Call Saul", image: "/series/bettercallsaul.png" },
-    { title: "Peaky Blinders", image: "/series/peakyblinders.png" },
-    { title: "Friends", image: "/series/friends.png" },
-    { title: "Stranger Things", image: "/series/strangerthings.png" },
+    {
+      "title": "Breaking Bad",
+      "image": "/series/breakingbad.jpg",
+      "description": "Breaking Bad es una serie dramática que sigue la transformación de Walter White, un profesor de química convertido en narcotraficante, después de ser diagnosticado con cáncer. A medida que se involucra en el mundo de las drogas, su vida  y la de su familia se ven profundamente afectadas. La serie destaca por su narrativa intensa, desarrollo de personajes complejos, y un enfoque en temas como la ambición, la moralidad y la consecuencia de las decisiones. Protagonizada por Bryan Cranston y Aaron Paul, es considerada una de las mejores series de la televisión.",
+      "releaseDate": "2008",
+      "genre": "Drama, Thriller, Crimen",
+      "rating": "+16"
+    },
+    {
+      "title": "The Office",
+      "image": "/series/theoffice.png",
+      "description": "The Office es una comedia de estilo documental que sigue la vida cotidiana de los empleados de Dunder Mifflin, una empresa de papel. Con momentos incómodos y personajes entrañables, la serie se ha convertido en un clásico moderno.",
+      "releaseDate": "2005",
+      "genre": "Comedia",
+      "rating": "Todo público"
+    },
+    {
+      "title": "The Big Bang Theory",
+      "image": "/series/bigbang.png",
+      "description": "The Big Bang Theory es una comedia que narra las vidas de un grupo de amigos nerds y su interacción con el mundo social, especialmente con Penny, su vecina y opuesta en muchos sentidos.",
+      "releaseDate": "2007",
+      "genre": "Comedia",
+      "rating": "Todo público"
+    },
+    {
+      "title": "Better Call Saul",
+      "image": "/series/bettercallsaul.png",
+      "description": "Better Call Saul es una precuela de Breaking Bad que narra la evolución de Jimmy McGill, un abogado de poca monta que se convierte en el inescrupuloso Saul Goodman. La serie combina drama legal con momentos de humor negro.",
+      "releaseDate": "2015",
+      "genre": "Drama, Crimen",
+      "rating": "+16"
+    },
+    {
+      "title": "Peaky Blinders",
+      "image": "/series/peakyblinders.png",
+      "description": "Peaky Blinders sigue las hazañas de la familia Shelby en el Birmingham de la posguerra. Conocidos por sus trajes elegantes y su brutalidad, los Shelby buscan expandir su imperio mientras enfrentan enemigos y traiciones.",
+      "releaseDate": "2013",
+      "genre": "Drama, Crimen, Histórico",
+      "rating": "+16"
+    },
+    {
+      "title": "Friends",
+      "image": "/series/friends.png",
+      "description": "Friends es una icónica comedia que sigue las vidas de seis amigos en Nueva York. A lo largo de diez temporadas, exploran relaciones, carreras y la complejidad de la amistad adulta.",
+      "releaseDate": "1994",
+      "genre": "Comedia, Romance",
+      "rating": "Todo público"
+    },
+    {
+      "title": "Stranger Things",
+      "image": "/series/strangerthings.png",
+      "description": "Stranger Things combina ciencia ficción y nostalgia ochentera en una historia donde un grupo de niños se enfrenta a fenómenos paranormales y monstruos provenientes de otra dimensión, conocida como 'El Otro Lado'.",
+      "releaseDate": "2016",
+      "genre": "Drama, Ciencia Ficción, Misterio",
+      "rating": "+13"
+    }
   ];
 
   useEffect(() => {

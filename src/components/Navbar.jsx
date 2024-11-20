@@ -48,7 +48,7 @@ const Navbar = () => {
           <path d="M21 21l-6 -6"></path>
         </svg>
         <div className="flex items-center pl-12 pr-4">
-          <img src="./profile.png" alt="foto-perfil" className="rounded-full mx-1" />
+          <img src="/profile.png" alt="foto-perfil" className="rounded-full mx-1" />
           <svg
             xmlns="http://www.w3.org/2000/svg"
             x-bind:width="size"

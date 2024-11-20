@@ -7,6 +7,7 @@ import SeriesScreen from "./pages/SeriesScreen";
 import MoviesScreen from "./pages/MoviesScreen";
 import MyLibraryScreen from "./pages/MyLibraryScreen";
 import DetailScreen from "./pages/DetailScreen";
+import ScrollToTop from "./components/ScrollToTop"; // Asegúrate de ajustar la ruta
 
 const App = () => {
   const [isRegistered, setIsRegistered] = useState(false);
@@ -26,6 +27,7 @@ const App = () => {
 
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
         <Route
           path="/"
@@ -42,7 +44,7 @@ const App = () => {
         <Route path="/series" element={<SeriesScreen />} />
         <Route path="/movies" element={<MoviesScreen />} />
         <Route path="/library" element={<MyLibraryScreen />} />
-        <Route path="/detalle/:title" element={<DetailScreen />} /> {/* Ruta dinámica para los detalles */}
+        <Route path="/detalle/:title" element={<DetailScreen />} />
       </Routes>
     </Router>
   );

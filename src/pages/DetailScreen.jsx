@@ -4,10 +4,10 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 const DetailScreen = () => {
-  const { title } = useParams(); // Obtiene el título desde la URL
-  const location = useLocation(); // Obtiene los parámetros de la URL
+  const { title } = useParams();
+  const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const image = queryParams.get("image"); // Obtiene la imagen desde los parámetros de la URL
+  const image = queryParams.get("image");
   const description =
     queryParams.get("description") || "Descripción no disponible.";
   const releaseDate = queryParams.get("releaseDate") || "N/A";
@@ -25,7 +25,6 @@ const DetailScreen = () => {
           }}
         >
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-azulprincipal"></div>
-          <img alt={title} className="w-full object-cover opacity-70 " />
         </div>
         <div className="relative">
           <div className="absolute bottom-5 left-5 flex w-1/6 justify-evenly">
