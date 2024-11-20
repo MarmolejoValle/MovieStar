@@ -30,7 +30,7 @@ const App = () => {
       <ScrollToTop />
       <Routes>
         <Route
-          path="/"
+          path="/login"
           element={
             isLoggedIn ? (
               <HomeScreen />
@@ -40,6 +40,10 @@ const App = () => {
               <Login onRegister={handleRegister} onLogin={handleLogin} />
             )
           }
+        />
+        <Route
+          path="/home"
+          element={isLoggedIn ? <HomeScreen /> : <Login onRegister={handleRegister} onLogin={handleLogin} />}
         />
         <Route path="/series" element={<SeriesScreen />} />
         <Route path="/movies" element={<MoviesScreen />} />
