@@ -6,6 +6,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import Login from "./pages/Login";
+import InfoPaymentsScreen from "./pages/InfoPaymentsScreen";
 import CategorySelection from "./pages/CategorySelection";
 import HomeScreen from "./pages/HomeScreen";
 import SeriesScreen from "./pages/SeriesScreen";
@@ -75,6 +76,13 @@ const App = () => {
           path="/detalle/:title"
           element={isLoggedIn ? <DetailScreen /> : <Navigate to="/" replace />}
         />
+
+        {/* Agrego la ruta de InfoPaymentsScreen */}
+        <Route 
+          path="/info-payments" 
+          element={<InfoPaymentsScreen />} 
+        />
+        
       </Routes>
     </Router>
   );
