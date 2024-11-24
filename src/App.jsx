@@ -78,11 +78,15 @@ const App = () => {
         />
 
         {/* Agrego la ruta de InfoPaymentsScreen */}
-        <Route 
-          path="/info-payments" 
-          element={<InfoPaymentsScreen />} 
+        <Route
+          path="/info-payments"
+          element={<InfoPaymentsScreen />}
         />
-        
+        <Route
+          path="/login"
+          element={<Login />}
+        />
+
       </Routes>
     </Router>
   );

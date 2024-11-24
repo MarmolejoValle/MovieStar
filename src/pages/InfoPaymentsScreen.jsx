@@ -1,21 +1,28 @@
 import React from "react";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
-
+import { useNavigate } from "react-router-dom";
+  
 const InfoPaymentsScreen = () => {
+  const navigate = useNavigate(); // Hook para navegar entre rutas
+
+
+  const handleLoginRedirect = () => {
+    navigate("/login"); // Redirige a la ruta de inicio de sesión
+  };
+
     return (
-        <div className="min-h-screen bg-gradient-to-b from-black to-red-900 text-white">
+        <div className="min-h-screen bg-gradient-to-b from-black to-red-900 text-white ">
             {/* Header */}
             <header className="flex justify-between items-center px-6 py-4">
                 {/* Logo */}
                 <img
                     src="/LOGO-MS.png" // Cambia esto al path correcto de tu logo
-                    alt="Logo de la Empresa"
                     className="h-20 w-auto" // Asegúrate de que la imagen no se distorsione
                 />
 
                 {/* Botón de iniciar sesión */}
-                <Button text="Iniciar Sesión" styleType="primary" />
+                <Button text="Iniciar Sesión" styleType="primary" onClick={handleLoginRedirect}/>
             </header>
 
             {/* Opciones de renta y compra */}
