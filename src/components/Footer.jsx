@@ -10,10 +10,10 @@ const Footer = () => {
           <p>777 123 4567</p>
           <p>
             <a
-              href="mailto:algo_alguien@example.com"
+              href="mailto:moviestarsup@gmail.com"
               className="text-white hover:underline"
             >
-              algo_alguien@example.com
+              moviestarsup@gmail.com
             </a>
           </p>
         </div>
