@@ -50,3 +50,31 @@ exports.library = async (idUser) => {
         }
     });
 };
+exports.addSale = async (period,idMovie,price,idUser,saleType) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //Conexion a la base de datos
+            const db = await mysql.connect();
+            //Query de la base de datos con un proceso almacenado
+            await db.execute(`CALL addSale('${period}',${idMovie},${price},${idUser},${saleType});`, (err, rows) => {
+                //Comprobaion de errores
+                if (err) throw err
+                //Verificacion de proceso
+                if (rows.affectedRows) {
+                    //Respuesta del query
+                    resolve({'message':"Proceso exitoso"});
+                    return
+                }
+                //Error por si no existe usuario
+                resolve({ "error": "Erro en el proceso" });
+                return
+
+            });
+
+
+        }
+        catch (error) {
+            reject(error);
+        }
+    });
+};
