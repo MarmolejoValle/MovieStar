@@ -1,4 +1,5 @@
 const userService = require("../service/user");
+const emailService = require("../service/email");
 exports.postSearch = async (req, res) => {
     try {
         const email = req.body.email;
@@ -38,13 +39,15 @@ exports.postAddSale = async (req, res) => {
         const price = req.body.price;
         const idUser = req.body.idUser;
         const saleType = req.body.saleType;
+        const email = req.body.email;
 
         //Comprobacion de valor idUser
-        if (!period || !idMovie || !price || !idUser || !saleType  ) throw new Error('Faltan algunos datos')
+        if (!period || !idMovie || !price || !idUser || !saleType || email) throw new Error('Faltan algunos datos')
 
         //Utilizacion del servicio de libreria
-        const response = await userService.addSale(period,idMovie,price,idUser,saleType);
-
+        const response = await userService.addSale(period, idMovie, price, idUser, saleType);
+        //Utilizacion de servicio de correo electronico
+        emailService.sendMail(email, 'Proceso de MovieStar', "Se a realizado una transaccion exitosa")
         //Respuesta en json
         res.json(response);
     } catch (error) {
