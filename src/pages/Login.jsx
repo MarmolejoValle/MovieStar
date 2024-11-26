@@ -10,19 +10,38 @@ const Login = ({ onRegister, onLogin }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  const handleLogin = async () => {
+    const userData = {
+      email,
+      password,
+    };
   
-  const fixedEmail = "Jared";
-  const fixedPassword = "12345678";
-
-  const handleLogin = () => {
-    if (email === fixedEmail && password === fixedPassword) {
-      onLogin();
-    } else {
-      setErrorMessage("Correo o contraseña incorrectos.");
+    console.log("Datos del login:", userData);
+  
+    try {
+      const response = await fetch("http://192.168.106.68:2003/api/user/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Respuesta del servidor:", data);
+        localStorage.setItem("userId", data.id);
+        onLogin();
+      } else {
+        const errorData = await response.json();
+        setErrorMessage(errorData.message || "Error al iniciar sesión.");
+      }
+    } catch (error) {
+      setErrorMessage("Error de conexión con el servidor.");
     }
   };
+  
 
-  const handleRegister = () => {
+
+  const handleRegister = async () => {
     if (password.length < 8) {
       setErrorMessage("La contraseña debe tener al menos 8 caracteres.");
       return;
@@ -31,9 +50,37 @@ const Login = ({ onRegister, onLogin }) => {
       setErrorMessage("Las contraseñas no coinciden.");
       return;
     }
+
+    const userData = {
+      name: document.querySelector("input[placeholder='Nombre']").value,
+      lastName: document.querySelector("input[placeholder='Apellido']").value,
+      password,
+      email: document.querySelector("input[placeholder='Correo electrónico']").value,
+    };
+
+    console.log("Datos del formulario:", userData);
     setErrorMessage("");
     onRegister();
+
+    try {
+      const response = await fetch("http://192.168.106.68:2003/api/user/createAccount", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+      });
+
+      if (response.ok) {
+        setErrorMessage("");
+        onRegister();
+      } else {
+        const errorData = await response.json();
+        setErrorMessage(errorData.message || "Error al registrar el usuario.");
+      }
+    } catch (error) {
+      setErrorMessage("Error de conexión con el servidor.");
+    }
   };
+
 
   return (
     <div
@@ -75,9 +122,20 @@ const Login = ({ onRegister, onLogin }) => {
           <div className="px-6">
             {isRegistering ? (
               <>
-                <InputField type="text" placeholder="Nombre completo" />
-                <InputField type="email" placeholder="Correo electrónico" />
-                <div className="text-left">
+                <div className="text-left mt-6">
+                  <p className="-mb-6">Ingresa tu nombre</p>
+                  <InputField type="text" placeholder="Nombre" />
+                </div>
+                <div className="text-left mt-4">
+                  <p className="-mb-6">Ingresa tu apellido</p>
+                  <InputField type="text" placeholder="Apellido" />
+                </div>
+                <div className="text-left mt-4">
+                  <p className="-mb-6">Ingresa tu correo electrónico</p>
+                  <InputField type="email" placeholder="Correo electrónico" />
+                </div>
+                <div className="text-left mt-4">
+                  <p className="-mb-6">Ingresa tu contraseña</p>
                   <InputField
                     type="password"
                     placeholder="Contraseña"
@@ -86,14 +144,14 @@ const Login = ({ onRegister, onLogin }) => {
                   />
                   <small className="text-zinc-400">* Mínimo 8 caracteres</small>
                 </div>
-                <div className="text-left -mt-4">
+                <div className="text-left mt-4">
+                  <p className="-mb-6">Confirma tu contraseña</p>
                   <InputField
                     type="password"
                     placeholder="Confirmar Contraseña"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                   />
-                  <small className="text-zinc-400">* Mínimo 8 caracteres</small>
                 </div>
               </>
             ) : (
