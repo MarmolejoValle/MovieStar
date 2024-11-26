@@ -11,7 +11,7 @@ const InfoPaymentsScreen = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-azulprincipal to-rojosecundario text-white flex flex-col">
+    <div className="bg-gradient-to-b from-azulprincipal to-rojosecundario text-white flex flex-col">
       <header className="fixed w-screen px-8">
         <div className="flex w-full justify-between items-center px-4 sm:px-6 py-4">
           <img

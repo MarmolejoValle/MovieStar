@@ -16,6 +16,7 @@ import MyLibraryScreen from "./pages/MyLibraryScreen";
 import DetailScreen from "./pages/DetailScreen";
 import ScrollToTop from "./components/ScrollToTop";
 import Navbar from "./components/Navbar";
+import ProfileScreen from "./pages/ProfileScreen";
 
 const AppContent = ({
   isLoggedIn,
@@ -27,7 +28,8 @@ const AppContent = ({
 }) => {
   const location = useLocation();
   const hideNavbarRoutes = ["/info-payments"];
-  const shouldShowNavbar = isLoggedIn && !hideNavbarRoutes.includes(location.pathname);
+  const shouldShowNavbar =
+    isLoggedIn && !hideNavbarRoutes.includes(location.pathname);
 
   return (
     <>
@@ -68,6 +70,10 @@ const AppContent = ({
         <Route
           path="/detalle/:title"
           element={isLoggedIn ? <DetailScreen /> : <Navigate to="/" replace />}
+        />
+        <Route
+          path="/profile"
+          element={isLoggedIn ? <ProfileScreen /> : <Navigate to="/" replace />}
         />
         <Route path="/info-payments" element={<InfoPaymentsScreen />} />
       </Routes>
