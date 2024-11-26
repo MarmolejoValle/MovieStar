@@ -50,7 +50,7 @@ exports.library = async (idUser) => {
         }
     });
 };
-exports.addSale = async (period,idMovie,price,idUser,saleType) => {
+exports.addSale = async (period, idMovie, price, idUser, saleType) => {
     return new Promise(async (resolve, reject) => {
         try {
             //Conexion a la base de datos
@@ -62,11 +62,39 @@ exports.addSale = async (period,idMovie,price,idUser,saleType) => {
                 //Verificacion de proceso
                 if (rows.affectedRows) {
                     //Respuesta del query
-                    resolve({'message':"Proceso exitoso"});
+                    resolve({ 'message': "Proceso exitoso" });
                     return
                 }
                 //Error por si no existe usuario
                 resolve({ "error": "Erro en el proceso" });
+                return
+
+            });
+
+
+        }
+        catch (error) {
+            reject(error);
+        }
+    });
+};
+exports.createAccount = (name,email,password,lastName) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //Conexion a la base de datos
+            const db = await mysql.connect();
+            //Query de la base de datos con una view
+            await db.execute(`INSERT INTO user (name,email,password,last_name) VALUES ('${name}','${email}','${password}', '${lastName}');`, (err, rows) => {
+                //Comprobaion de errores
+                if (err) throw err
+                //Comprobacin de elementos 
+                if (rows.affectedRows) {
+                    //Respuesta del query
+                    resolve({ 'message': "Cuenta creada exitosamente" });
+                    return
+                }
+                //Error por si no existe usuario
+                resolve({ "error": "Hubo un error al crear el usuario" });
                 return
 
             });
