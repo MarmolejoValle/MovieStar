@@ -4,6 +4,7 @@ import {
   Routes,
   Route,
   Navigate,
+  useLocation,
 } from "react-router-dom";
 import Login from "./pages/Login";
 import InfoPaymentsScreen from "./pages/InfoPaymentsScreen";
@@ -16,30 +17,22 @@ import DetailScreen from "./pages/DetailScreen";
 import ScrollToTop from "./components/ScrollToTop";
 import Navbar from "./components/Navbar";
 
-const App = () => {
-  const [isRegistered, setIsRegistered] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const handleRegister = () => {
-    setIsRegistered(true);
-  };
-
-  const handleBack = () => {
-    setIsRegistered(false);
-  };
-
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-  };
-
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-  };
+const AppContent = ({
+  isLoggedIn,
+  handleLogout,
+  isRegistered,
+  handleRegister,
+  handleBack,
+  handleLogin,
+}) => {
+  const location = useLocation();
+  const hideNavbarRoutes = ["/info-payments"];
+  const shouldShowNavbar = isLoggedIn && !hideNavbarRoutes.includes(location.pathname);
 
   return (
-    <Router>
+    <>
       <ScrollToTop />
-      {isLoggedIn && <Navbar onLogout={handleLogout} />}
+      {shouldShowNavbar && <Navbar onLogout={handleLogout} />}
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route
@@ -76,18 +69,42 @@ const App = () => {
           path="/detalle/:title"
           element={isLoggedIn ? <DetailScreen /> : <Navigate to="/" replace />}
         />
-
-        {/* Agrego la ruta de InfoPaymentsScreen */}
-        <Route
-          path="/info-payments"
-          element={<InfoPaymentsScreen />}
-        />
-        <Route
-          path="/login"
-          element={<Login />}
-        />
-
+        <Route path="/info-payments" element={<InfoPaymentsScreen />} />
       </Routes>
+    </>
+  );
+};
+
+const App = () => {
+  const [isRegistered, setIsRegistered] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleRegister = () => {
+    setIsRegistered(true);
+  };
+
+  const handleBack = () => {
+    setIsRegistered(false);
+  };
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
+
+  return (
+    <Router>
+      <AppContent
+        isLoggedIn={isLoggedIn}
+        handleLogout={handleLogout}
+        isRegistered={isRegistered}
+        handleRegister={handleRegister}
+        handleBack={handleBack}
+        handleLogin={handleLogin}
+      />
     </Router>
   );
 };
