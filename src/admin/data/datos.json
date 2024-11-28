@@ -1,0 +1,49 @@
+{
+    "peliculas": [
+      {
+        "titulo": "Avengers: Endgame",
+        "genero": "Acción, Aventura, Ciencia Ficción",
+        "precio": 80,
+        "duracion": "181 minutos",
+        "calificacion": 5
+      },
+      {
+        "titulo": "Frozen II",
+        "genero": "Animación, Aventura, Fantasía",
+        "precio": 65,
+        "duracion": "103 minutos",
+        "calificacion": 4 
+      },
+      {
+        "titulo": "El Caballero de la Noche",
+        "genero": "Acción, Crimen, Drama",
+        "precio": 50,
+        "duracion": "152 minutos",
+        "calificacion": 5
+      }
+    ],
+    "series": [
+      {
+        "titulo": "Stranger Things",
+        "genero": "Ciencia Ficción, Drama, Suspenso",
+        "precio": 120,
+        "duracion": "34 episodios",
+        "calificacion": 5
+      },
+      {
+        "titulo": "Breaking Bad",
+        "genero": "Crimen, Drama, Suspenso",
+        "precio": 150,
+        "duracion": "62 episodios",
+        "calificacion": 5
+      },
+      {
+        "titulo": "The Office",
+        "genero": "Comedia",
+        "precio": 90,
+        "duracion": "201 episodios",
+        "calificacion": 4
+      }
+    ]
+  }
+  
