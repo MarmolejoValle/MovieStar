@@ -19,7 +19,7 @@ const Login = ({ onRegister, onLogin }) => {
     console.log("Datos del login:", userData);
   
     try {
-      const response = await fetch("http://192.168.106.68:2003/api/user/login", {
+      const response = await fetch("http://192.168.110.255:2003/api/user/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
@@ -63,7 +63,7 @@ const Login = ({ onRegister, onLogin }) => {
     onRegister();
 
     try {
-      const response = await fetch("http://192.168.106.68:2003/api/user/createAccount", {
+      const response = await fetch("http://192.168.110.255:2003/api/user/createAccount", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
