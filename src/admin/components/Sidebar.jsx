@@ -1,51 +1,58 @@
-import React, { useState } from "react";
+import { IoIosMenu } from "react-icons/io";
+import { GiHandTruck, GiRiceCooker } from "react-icons/gi";
+import { HiTruck } from "react-icons/hi2";
+import { RiBarChartGroupedLine } from "react-icons/ri";
+import { FaUsers } from "react-icons/fa";
+import { CiLogout } from "react-icons/ci";
+import { useState } from "react";
+import { IconLabel } from "./IconLabel";
 
-const Sidebar = ({ setSection }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+export const Sidebar = () => {
+  const [labelVision, setLabelVision] = useState({ vision: false, width: "w-44" });
+
+  const changeSize = () => {
+    setLabelVision((prev) => ({
+      vision: !prev.vision,
+      width: prev.vision ? "w-44" : "w-14",
+    }));
+  };
 
   return (
-    <aside
-      className={`bg-gray-900 text-white w-${isExpanded ? "64" : "16"} 
-        hover:w-64 transition-all duration-300 h-screen flex flex-col items-center p-4`}
-      onMouseEnter={() => setIsExpanded(true)}  
-      onMouseLeave={() => setIsExpanded(false)} 
-    >
-      {/* MovieStar or M depending on expansion */}
-      <div className="text-2xl font-bold text-white mb-6">
-        {isExpanded ? "MovieStar" : "M"}
-      </div>
+    <>
+      <div className={`${labelVision.wigth}  ml-4 mr-4 h-[90vh] mt-8 flex justify-center items-center`} >
+        <nav id="barNav" style={{ backgroundColor: "red" }} className={`text-white ${labelVision.wigth} h-[90vh] fixed  flex flex-col justify-between  rounded-xl   duration-75`}>
 
-      <div
-        className="text-xl mb-4 cursor-pointer"
-      >
-        ☰
-      </div>
+          <div className="flex flex-col mt-3" id="menu" >
+            <div onClick={changeSize}>
+              <IconLabel Icon={IoIosMenu} value={"Menú"} id={"users"} boolean={labelVision.vision} />
 
-      <ul className="flex flex-col gap-6">
-        <li
-          className="hover:cursor-pointer hover:text-gray-300"
-          onClick={() => setSection("Contenido")}
-        >
-          {isExpanded ? "📋 Contenido" : "📋"}
-        </li>
-        <li
-          className="hover:cursor-pointer hover:text-gray-300"
-          onClick={() => setSection("Estadísticas")}
-        >
-          {isExpanded ? "📊 Estadísticas" : "📊"}
-        </li>
-        <li
-          className="hover:cursor-pointer hover:text-gray-300"
-          onClick={() => setSection("Promociones")}
-        >
-          {isExpanded ? "🎁 Promociones" : "🎁"}
-        </li>
-      </ul>
+            </div>
 
-      <div className="mt-auto hover:cursor-pointer hover:text-red-500">
-        {isExpanded ? "Salir" : "🚪"}
+          </div>
+
+          <div className="flex flex-col ">
+            <IconLabel Icon={FaUsers} value={"Usuarios"} id={"Usuarios"} boolean={labelVision.vision} urlRoute={"/Users"} />
+            <IconLabel Icon={RiBarChartGroupedLine} value={"Gráficas"} id={"users"} boolean={labelVision.vision} urlRoute={"/Graphics"} />
+            <IconLabel Icon={HiTruck} value={"Pedidos"} id={"Pedidos"} boolean={labelVision.vision} urlRoute={"/Ordens"} />
+            <IconLabel Icon={GiRiceCooker} value={"Extras"} id={"Extras"} boolean={labelVision.vision} urlRoute={"/Extras"} />
+            <IconLabel Icon={GiHandTruck} value={"Inventario"} id={"users"} boolean={labelVision.vision} urlRoute={"/Inventory"} />
+          </div>
+          <div className="flex flex-col mb-3" id="footer">
+
+            <IconLabel Icon={CiLogout} value={"Cerrar Sesión"} id={"Salir"} boolean={labelVision.vision} urlRoute={"/"} />
+            <div className="flex justify-center mt-4">
+              <img style={{ width: "16px" , height: "15px" }}
+                src="/LOGO-MS.png"
+                alt="Logo de la Empresa"
+                className="absolute top-8 left-16 h-20 w-auto"
+              />
+
+            </div>
+          </div>
+
+        </nav>
       </div>
-    </aside>
+    </>
   );
 };
 
