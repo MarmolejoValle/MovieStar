@@ -39,7 +39,7 @@ const DetailScreen = () => {
           <div className="absolute bottom-5 left-5 flex w-1/6 justify-evenly">
             <h1
               onClick={() => handleTabChange("DETALLES")}
-              className={`cursor-pointer text-xl font-thin transition-all ${
+              className={`cursor-pointer text-xl  transition-all ${
                 activeTab === "DETALLES" ? "font-extrabold	" : "text-white"
               }`}
             >
@@ -47,7 +47,7 @@ const DetailScreen = () => {
             </h1>
             <h1
               onClick={() => handleTabChange("VER AHORA")}
-              className={`cursor-pointer text-xl font-thin transition-all ${
+              className={`cursor-pointer text-xl transition-all ${
                 activeTab === "VER AHORA" ? "font-extrabold	" : "text-white"
               }`}
             >

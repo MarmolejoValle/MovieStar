@@ -19,8 +19,8 @@ export const Sidebar = () => {
 
   return (
     <>
-      <div className={`${labelVision.wigth}  ml-4 mr-4 h-[90vh] mt-8 flex justify-center items-center`} >
-        <nav id="barNav" style={{ backgroundColor: "red" }} className={`text-white ${labelVision.wigth} h-[90vh] fixed  flex flex-col justify-between  rounded-xl   duration-75`}>
+      <div className={`${labelVision.wigth}  ml-4 mr-4 h-[90vh] mt-8 flex justify-start items-center`} >
+        <nav id="barNav" style={{ backgroundColor: "grey" }} className={`text-white ${labelVision.wigth} h-[90vh] fixed  flex flex-col justify-between  rounded-xl   duration-75`}>
 
           <div className="flex flex-col mt-3" id="menu" >
             <div onClick={changeSize}>
@@ -30,7 +30,7 @@ export const Sidebar = () => {
 
           </div>
 
-          <div className="flex flex-col ">
+          <div className="flex flex-col mr-2">
             <IconLabel Icon={FaUsers} value={"Usuarios"} id={"Usuarios"} boolean={labelVision.vision} urlRoute={"/Users"} />
             <IconLabel Icon={RiBarChartGroupedLine} value={"Gráficas"} id={"users"} boolean={labelVision.vision} urlRoute={"/Graphics"} />
             <IconLabel Icon={HiTruck} value={"Pedidos"} id={"Pedidos"} boolean={labelVision.vision} urlRoute={"/Ordens"} />
@@ -39,12 +39,12 @@ export const Sidebar = () => {
           </div>
           <div className="flex flex-col mb-3" id="footer">
 
-            <IconLabel Icon={CiLogout} value={"Cerrar Sesión"} id={"Salir"} boolean={labelVision.vision} urlRoute={"/"} />
+            <IconLabel Icon={CiLogout} value={"Cerrar"} id={"Salir"} boolean={labelVision.vision} urlRoute={"/"} />
             <div className="flex justify-center mt-4">
-              <img style={{ width: "16px" , height: "15px" }}
+              <img style={{ width: "50px" , height: "20px" }}
                 src="/LOGO-MS.png"
                 alt="Logo de la Empresa"
-                className="absolute top-8 left-16 h-20 w-auto"
+                className="top-8 left-16 h-20 w-auto"
               />
 
             </div>

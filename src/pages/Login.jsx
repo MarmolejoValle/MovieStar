@@ -63,7 +63,7 @@ const Login = ({ onRegister, onLogin }) => {
     onRegister();
 
     try {
-      const response = await fetch("http://192.168.110.255:2003/api/user/createAccount", {
+      const response = await fetch("http://192.168.110.255:2003/api/client/createAccount", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
