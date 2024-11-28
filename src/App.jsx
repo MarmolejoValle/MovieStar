@@ -17,6 +17,7 @@ import DetailScreen from "./pages/DetailScreen";
 import ScrollToTop from "./components/ScrollToTop";
 import Navbar from "./components/Navbar";
 import ProfileScreen from "./pages/ProfileScreen";
+import AdminHomeScreen from "./admin/pages/AdminHomeScreen";
 
 const AppContent = ({
   isLoggedIn,
@@ -76,6 +77,7 @@ const AppContent = ({
           element={isLoggedIn ? <ProfileScreen /> : <Navigate to="/" replace />}
         />
         <Route path="/info-payments" element={<InfoPaymentsScreen />} />
+        <Route path="/admin-views" element={<AdminHomeScreen/>} />
       </Routes>
     </>
   );

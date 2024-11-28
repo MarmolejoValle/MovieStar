@@ -26,6 +26,12 @@ const Footer = () => {
               Paquetes y formas de pago
             </p>
           </Link>
+          {/* Vista de administrador temporales */}
+          <Link to="/admin-views">
+            <p className="text-red-500 hover:underline cursor-pointer">
+              Vistas de Administrador - Desarrollo
+            </p>
+          </Link>
         </div>
       </div>
       <div className="mt-6 mx-10 h-px bg-gray-500"></div>
