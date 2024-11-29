@@ -2,51 +2,67 @@ import React, { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Footer from "../../components/Footer";
 
-export const Disconts = () => {
-  const [showAddForm, setShowAddForm] = useState(false); 
+export const Discounts = () => {
+  const [showAddForm, setShowAddForm] = useState(false);
   const [promotions, setPromotions] = useState([
-    // Ejemplo de promociones activas
-    { 
-      id: 1, 
-      name: "Buen Fin", 
-      description: "Descuento del 10% en todas las compras", 
-      tipo: "Desc", 
-      valor: 10, 
-      startDate: "2024-11-16", 
-      endDate: "2024-11-19" 
+    {
+      id: 1,
+      id_movie: 101,
+      name: "Buen Fin",
+      description: "Descuento del 10% en todas las compras",
+      fk_sales_type: 1,
+      price: 10,
+      date_start: "2024-11-16",
+      date_end: "2024-11-19",
     },
-    { 
-      id: 2, 
-      name: "Black Friday", 
-      description: "Descuento de $50 en compra de 2 Series/Peliculas", 
-      tipo: "Monto", 
-      valor: 50, 
-      startDate: "2024-11-24", 
-      endDate: "2024-11-24" 
-    }
+    {
+      id: 2,
+      id_movie: 202,
+      name: "Black Friday",
+      description: "Descuento de $50 en compra de 2 Series/Peliculas",
+      fk_sales_type: 2,
+      price: 50,
+      date_start: "2024-11-24",
+      date_end: "2024-11-24",
+    },
   ]);
 
-  const handleAddPromotion = () => setShowAddForm(true); 
+  const [movies, setMovies] = useState([
+    { id: 1, title: "Pelicula 1" },
+    { id: 2, title: "Pelicula 2" },
+    { id: 3, title: "Pelicula 3" },
+  ]); // Lista de películas
+
+  const handleAddPromotion = () => setShowAddForm(true);
   const handleDeletePromotion = (id) =>
-    setPromotions(promotions.filter((promo) => promo.id !== id)); 
+    setPromotions(promotions.filter((promo) => promo.id !== id));
 
   const handleAddSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    
+
+    const price = parseFloat(formData.get("price"));
+    if (price <= 0) {
+      alert("El valor debe ser mayor a 0.");
+      return;
+    }
+
     const newPromotion = {
       id: Date.now(),
-      name: formData.get("name"), 
-      description: formData.get("description"), 
-      tipo: formData.get("tipo"), 
-      valor: parseFloat(formData.get("valor")), 
-      startDate: formData.get("startDate"), 
-      endDate: formData.get("endDate"), 
+      id_movie: parseInt(formData.get("id_movie")),
+      name: formData.get("name"),
+      description: formData.get("description"),
+      fk_sales_type: parseInt(formData.get("fk_sales_type")),
+      price,
+      date_start: formData.get("date_start"),
+      date_end: formData.get("date_end"),
     };
-  
-    setPromotions([...promotions, newPromotion]); 
-    setShowAddForm(false); 
+
+    setPromotions([...promotions, newPromotion]);
+    setShowAddForm(false);
   };
+
+  const today = new Date().toISOString().split("T")[0]; 
 
   return (
     <>
@@ -75,10 +91,14 @@ export const Disconts = () => {
                 <h2 className="text-lg font-semibold mb-2">{promo.name}</h2>
                 <p className="text-sm text-gray-400">{promo.description}</p>
                 <p className="text-sm text-gray-400">
-                  Tipo: {promo.tipo}, Valor: {promo.tipo === "Desc" ? `${promo.valor}%` : `$${promo.valor}`}
+                  Película ID: {promo.id_movie}
                 </p>
                 <p className="text-sm text-gray-400">
-                  Desde: {promo.startDate} hasta: {promo.endDate}
+                  Tipo: {promo.fk_sales_type === 1 ? "Descuento (%)" : "Monto ($)"}, Valor:{" "}
+                  {promo.fk_sales_type === 1 ? `${promo.price}%` : `$${promo.price}`}
+                </p>
+                <p className="text-sm text-gray-400">
+                  Desde: {promo.date_start} hasta: {promo.date_end}
                 </p>
                 <button
                   className="absolute top-3 right-3 bg-red-500 text-white rounded-full p-2 shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
@@ -96,6 +116,21 @@ export const Disconts = () => {
               <div className="bg-gray-900 text-white p-8 rounded-lg shadow-lg w-full max-w-lg">
                 <h2 className="text-2xl font-bold mb-4">Añadir Promoción</h2>
                 <form onSubmit={handleAddSubmit}>
+                  <div className="mb-4">
+                    <label className="block text-sm mb-2">Película</label>
+                    <select
+                      name="id_movie"
+                      className="w-full p-2 bg-gray-800 border border-gray-700 rounded-lg"
+                      required
+                    >
+                      <option value="">Selecciona una película</option>
+                      {movies.map((movie) => (
+                        <option key={movie.id} value={movie.id}>
+                          {movie.title}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                   <div className="mb-4">
                     <label className="block text-sm mb-2">Nombre de la promoción</label>
                     <input
@@ -117,20 +152,22 @@ export const Disconts = () => {
                     <div className="flex-1">
                       <label className="block text-sm mb-2">Tipo</label>
                       <select
-                        name="tipo"
+                        name="fk_sales_type"
                         className="w-full p-2 bg-gray-800 border border-gray-700 rounded-lg"
                         required
                       >
-                        <option value="Desc">Descuento (%)</option>
-                        <option value="Monto">Monto ($)</option>
+                        <option value="1">Descuento (%)</option>
+                        <option value="2">Monto ($)</option>
                       </select>
                     </div>
                     <div className="flex-1">
                       <label className="block text-sm mb-2">Valor (%/$)</label>
                       <input
                         type="number"
-                        name="valor"
+                        name="price"
                         className="w-full p-2 bg-gray-800 border border-gray-700 rounded-lg"
+                        min="0.01"
+                        step="0.01"
                         required
                       />
                     </div>
@@ -139,8 +176,9 @@ export const Disconts = () => {
                     <label className="block text-sm mb-2">Fecha de inicio</label>
                     <input
                       type="date"
-                      name="startDate"
+                      name="date_start"
                       className="w-full p-2 bg-gray-800 border border-gray-700 rounded-lg"
+                      min={today}
                       required
                     />
                   </div>
@@ -148,8 +186,9 @@ export const Disconts = () => {
                     <label className="block text-sm mb-2">Fecha de final</label>
                     <input
                       type="date"
-                      name="endDate"
+                      name="date_end"
                       className="w-full p-2 bg-gray-800 border border-gray-700 rounded-lg"
+                      min={today}
                       required
                     />
                   </div>
@@ -174,8 +213,9 @@ export const Disconts = () => {
           )}
         </div>
       </div>
+      <Footer />
     </>
   );
 };
 
-export default Disconts;
+export default Discounts;
