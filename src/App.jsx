@@ -20,7 +20,6 @@ import ProfileScreen from "./pages/ProfileScreen";
 import Content from "./admin/pages/Content"; 
 import Disconts from "./admin/pages/Discounts";
 import Sidebar from "./admin/components/Sidebar"; 
-import NavbarAdmin from "./admin/components/NavbarAdmin"; 
 import Graphics from "./admin/pages/Graphics";
 
 
