@@ -9,6 +9,7 @@ export default {
       colors: {
         'azulprincipal': '#13161A',
         'rojosecundario': '#A62940',
+        'azulsecundario': '#393D43',
       },
       fontFamily: {
         tituloPeliHome: ['Lavishly Yours', 'cursive'],

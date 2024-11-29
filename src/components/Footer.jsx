@@ -20,14 +20,12 @@ const Footer = () => {
         <div className="h-19 w-px bg-gray-500"></div>
         <div className="text-center">
           <p className="text-white font-medium pb-2">Información</p>
-          {/* Ruta a InfoPaymentsScreen */}
           <Link to="/info-payments">
             <p className="text-gray-500 hover:underline cursor-pointer">
               Paquetes y formas de pago
             </p>
           </Link>
-          {/* Vista de administrador temporales */}
-          <Link to="/admin-views">
+          <Link to="/Content">
             <p className="text-red-500 hover:underline cursor-pointer">
               Vistas de Administrador - Desarrollo
             </p>

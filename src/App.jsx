@@ -17,9 +17,11 @@ import DetailScreen from "./pages/DetailScreen";
 import ScrollToTop from "./components/ScrollToTop";
 import Navbar from "./components/Navbar";
 import ProfileScreen from "./pages/ProfileScreen";
-import Contenido from "./admin/pages/Contenido"; 
+import Content from "./admin/pages/Content"; 
+import Disconts from "./admin/pages/Discounts";
 import Sidebar from "./admin/components/Sidebar"; 
 import NavbarAdmin from "./admin/components/NavbarAdmin"; 
+import Graphics from "./admin/pages/Graphics";
 
 
 const AppContent = ({
@@ -80,7 +82,9 @@ const AppContent = ({
           element={isLoggedIn ? <ProfileScreen /> : <Navigate to="/" replace />}
         />
         <Route path="/info-payments" element={<InfoPaymentsScreen />} />
-        <Route path="/admin-views" element={<Contenido/>} />
+        <Route path="/Content" element={<Content/>} />
+        <Route path="/Disconts" element={<Disconts/>} />
+        <Route path="/Graphics" element={<Graphics/>} />
       </Routes>
     </>
   );

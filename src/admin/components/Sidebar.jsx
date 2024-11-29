@@ -1,58 +1,90 @@
 import { IoIosMenu } from "react-icons/io";
-import { GiHandTruck, GiRiceCooker } from "react-icons/gi";
-import { HiTruck } from "react-icons/hi2";
 import { RiBarChartGroupedLine } from "react-icons/ri";
-import { FaUsers } from "react-icons/fa";
 import { CiLogout } from "react-icons/ci";
-import { useState } from "react";
 import { IconLabel } from "./IconLabel";
+import { BiMoneyWithdraw } from "react-icons/bi";
+import { MdMovie } from "react-icons/md";
+import { useState } from "react";
 
 export const Sidebar = () => {
-  const [labelVision, setLabelVision] = useState({ vision: false, width: "w-44" });
+  const [labelVision, setLabelVision] = useState({
+    vision: false,
+    width: "w-14", // Inicialmente contraído
+  });
 
-  const changeSize = () => {
-    setLabelVision((prev) => ({
-      vision: !prev.vision,
-      width: prev.vision ? "w-44" : "w-14",
-    }));
+  const expandSidebar = () => {
+    setLabelVision({
+      vision: true,
+      width: "w-44",
+    });
+  };
+
+  const collapseSidebar = () => {
+    setLabelVision({
+      vision: false,
+      width: "w-14",
+    });
   };
 
   return (
-    <>
-      <div className={`${labelVision.wigth}  ml-4 mr-4 h-[90vh] mt-8 flex justify-start items-center`} >
-        <nav id="barNav" style={{ backgroundColor: "grey" }} className={`text-white ${labelVision.wigth} h-[90vh] fixed  flex flex-col justify-between  rounded-xl   duration-75`}>
-
-          <div className="flex flex-col mt-3" id="menu" >
-            <div onClick={changeSize}>
-              <IconLabel Icon={IoIosMenu} value={"Menú"} id={"users"} boolean={labelVision.vision} />
-
-            </div>
-
+    <div
+      className={`ml-4 mr-4 h-[90vh] mt-8 sticky top-0 justify-start items-center`}
+    >
+      <nav
+        id="barNav"
+        className={`bg-azulsecundario text-white ${labelVision.width} h-[calc(100vh-4rem)] flex flex-col justify-between rounded-xl duration-75`}
+        onMouseEnter={expandSidebar}
+        onMouseLeave={collapseSidebar}
+      >
+        <div className="flex flex-col mt-3" id="menu">
+          <IconLabel
+            Icon={IoIosMenu}
+            value={"Menú"}
+            id={"menu"}
+            boolean={labelVision.vision}
+          />
+        </div>
+        <div className="flex flex-col">
+          <IconLabel
+            Icon={MdMovie}
+            value={"Contenido"}
+            id={"Contenido"}
+            boolean={labelVision.vision}
+            urlRoute={"/Content"}
+          />
+          <IconLabel
+            Icon={RiBarChartGroupedLine}
+            value={"Estadísticas"}
+            id={"Graphics"}
+            boolean={labelVision.vision}
+            urlRoute={"/Graphics"}
+          />
+          <IconLabel
+            Icon={BiMoneyWithdraw}
+            value={"Promociones"}
+            id={"Promos"}
+            boolean={labelVision.vision}
+            urlRoute={"/Disconts"}
+          />
+        </div>
+        <div className="flex flex-col mb-3" id="footer">
+          <IconLabel
+            Icon={CiLogout}
+            value={"Cerrar"}
+            id={"Salir"}
+            boolean={labelVision.vision}
+            urlRoute={"/"}
+          />
+          <div className="flex justify-center mt-4">
+            <img
+              src="/LOGO-MS.png"
+              alt="Logo de la Empresa"
+              className="top-8 px-8 h-auto w-auto"
+            />
           </div>
-
-          <div className="flex flex-col mr-2">
-            <IconLabel Icon={FaUsers} value={"Usuarios"} id={"Usuarios"} boolean={labelVision.vision} urlRoute={"/Users"} />
-            <IconLabel Icon={RiBarChartGroupedLine} value={"Gráficas"} id={"users"} boolean={labelVision.vision} urlRoute={"/Graphics"} />
-            <IconLabel Icon={HiTruck} value={"Pedidos"} id={"Pedidos"} boolean={labelVision.vision} urlRoute={"/Ordens"} />
-            <IconLabel Icon={GiRiceCooker} value={"Extras"} id={"Extras"} boolean={labelVision.vision} urlRoute={"/Extras"} />
-            <IconLabel Icon={GiHandTruck} value={"Inventario"} id={"users"} boolean={labelVision.vision} urlRoute={"/Inventory"} />
-          </div>
-          <div className="flex flex-col mb-3" id="footer">
-
-            <IconLabel Icon={CiLogout} value={"Cerrar"} id={"Salir"} boolean={labelVision.vision} urlRoute={"/"} />
-            <div className="flex justify-center mt-4">
-              <img style={{ width: "50px" , height: "20px" }}
-                src="/LOGO-MS.png"
-                alt="Logo de la Empresa"
-                className="top-8 left-16 h-20 w-auto"
-              />
-
-            </div>
-          </div>
-
-        </nav>
-      </div>
-    </>
+        </div>
+      </nav>
+    </div>
   );
 };
 
