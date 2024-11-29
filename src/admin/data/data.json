@@ -1,0 +1,55 @@
+{
+    "movies": [
+      {
+        "image": "avengers.jpg",
+        "title": "Avengers: Endgame",
+        "genre": "Acción, Aventura, Ciencia Ficción",
+        "price": "80 $",
+        "duration": "181 minutos",
+        "rating": "⭐⭐⭐⭐⭐"
+      },
+      {
+        "image": "frozenII.jpg",
+        "title": "Frozen II",
+        "genre": "Animación, Aventura, Fantasía",
+        "price": "65 $",
+        "duration": "103 minutos",
+        "rating": "⭐⭐⭐⭐⭐"
+      },
+      {
+        "image": "darkKnight.jpg",
+        "title": "El Caballero de la Noche",
+        "genre": "Acción, Crimen, Drama",
+        "price": "50 $",
+        "duration": "152 minutos",
+        "rating": "⭐⭐⭐⭐⭐"
+      }
+    ],
+    "series": [
+      {
+        "image": "breakingBad.jpg",
+        "title": "Breaking Bad",
+        "genre": "Crimen, Drama, Suspenso",
+        "price": "120 $",
+        "duration": "5 temporadas",
+        "rating": "⭐⭐⭐⭐⭐"
+      },
+      {
+        "image": "strangerThings.jpg",
+        "title": "Stranger Things",
+        "genre": "Drama, Fantasía, Terror",
+        "price": "100 $",
+        "duration": "4 temporadas",
+        "rating": "⭐⭐⭐⭐⭐"
+      },
+      {
+        "image": "got.jpg",
+        "title": "Game of Thrones",
+        "genre": "Drama, Fantasía, Aventura",
+        "price": "150 $",
+        "duration": "8 temporadas",
+        "rating": "⭐⭐⭐⭐⭐"
+      }
+    ]
+  }
+  
