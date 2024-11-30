@@ -29,7 +29,7 @@ exports.postAddSale = async (req, res) => {
         const email = req.body.email;
 
         //Comprobacion de valor idUser
-        if (!period || !idMovie || !price || !idUser || !saleType || email) throw new Error('Faltan algunos datos')
+        if (!period || !idMovie || !price || !idUser || !saleType || !email) throw new Error('Faltan algunos datos')
 
         //Utilizacion del servicio de libreria
         const response = await userService.addSale(period, idMovie, price, idUser, saleType);
