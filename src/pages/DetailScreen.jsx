@@ -125,7 +125,7 @@ const DetailScreen = () => {
               <div className="w-full flex justify-center">
                 <iframe
                   width="50%"
-                  height="300"
+                  height="500"
                   src="https://www.youtube.com/embed/mXd1zTwcQ18?si=uF3feHVSf02FEMbL"
                   title="YouTube video player"
                   frameBorder="0"
