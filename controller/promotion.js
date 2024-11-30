@@ -36,3 +36,22 @@ exports.getviewAllPromotions = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+exports.postdeletePromotion = async (req, res) => {
+    try {
+        //Paremetros de body json
+        const id = req.body.id;
+
+
+        //Comprobacion de valor 
+        if (!id ) throw new Error('Faltan algunos datos')
+
+        //Utilizacion del servicio para añadir una promocion
+        const response = await promotionService.deletePromotion(id);
+
+        //Respuesta en json
+        res.json(response);
+    } catch (error) {
+        //Respuesta de error
+        res.status(500).json({ error: error.message });
+    }
+};
