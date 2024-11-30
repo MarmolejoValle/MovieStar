@@ -15,9 +15,11 @@ const Login = ({ onRegister, onLogin }) => {
       email,
       password,
     };
-  
+
     console.log("Datos del login:", userData);
-  
+
+    // Comentado el fetch para pruebas sin conexión
+    /*
     try {
       const response = await fetch("http://192.168.110.255:2003/api/user/login", {
         method: "POST",
@@ -37,9 +39,17 @@ const Login = ({ onRegister, onLogin }) => {
     } catch (error) {
       setErrorMessage("Error de conexión con el servidor.");
     }
-  };
-  
+    */
 
+    // Acceso provisional sin conexión al servidor
+    if (email === "jaredjuarez46@gmail.com" && password === "12345678") {
+      console.log("Acceso provisional exitoso.");
+      localStorage.setItem("userId", "provisionalUserId");
+      onLogin();
+    } else {
+      setErrorMessage("Credenciales inválidas.");
+    }
+  };
 
   const handleRegister = async () => {
     if (password.length < 8) {
@@ -55,20 +65,23 @@ const Login = ({ onRegister, onLogin }) => {
       name: document.querySelector("input[placeholder='Nombre']").value,
       lastName: document.querySelector("input[placeholder='Apellido']").value,
       password,
-      email: document.querySelector("input[placeholder='Correo electrónico']").value,
+      email: document.querySelector("input[placeholder='Correo electrónico']")
+        .value,
     };
 
     console.log("Datos del formulario:", userData);
     setErrorMessage("");
     onRegister();
 
+    // Comentado el fetch para pruebas sin conexión
+    /*
     try {
       const response = await fetch("http://192.168.110.255:2003/api/client/createAccount", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
       });
-
+  
       if (response.ok) {
         setErrorMessage("");
         onRegister();
@@ -79,8 +92,8 @@ const Login = ({ onRegister, onLogin }) => {
     } catch (error) {
       setErrorMessage("Error de conexión con el servidor.");
     }
+    */
   };
-
 
   return (
     <div
@@ -123,19 +136,19 @@ const Login = ({ onRegister, onLogin }) => {
             {isRegistering ? (
               <>
                 <div className="text-left mt-6">
-                  <p className="-mb-6">Ingresa tu nombre</p>
+                  <p className="mb-6">Ingresa tu nombre</p>
                   <InputField type="text" placeholder="Nombre" />
                 </div>
                 <div className="text-left mt-4">
-                  <p className="-mb-6">Ingresa tu apellido</p>
+                  <p className="mb-6">Ingresa tu apellido</p>
                   <InputField type="text" placeholder="Apellido" />
                 </div>
                 <div className="text-left mt-4">
-                  <p className="-mb-6">Ingresa tu correo electrónico</p>
+                  <p className="mb-6">Ingresa tu correo electrónico</p>
                   <InputField type="email" placeholder="Correo electrónico" />
                 </div>
                 <div className="text-left mt-4">
-                  <p className="-mb-6">Ingresa tu contraseña</p>
+                  <p className="mb-6">Ingresa tu contraseña</p>
                   <InputField
                     type="password"
                     placeholder="Contraseña"
@@ -145,7 +158,7 @@ const Login = ({ onRegister, onLogin }) => {
                   <small className="text-zinc-400">* Mínimo 8 caracteres</small>
                 </div>
                 <div className="text-left mt-4">
-                  <p className="-mb-6">Confirma tu contraseña</p>
+                  <p className="mb-4">Confirma tu contraseña</p>
                   <InputField
                     type="password"
                     placeholder="Confirmar Contraseña"
@@ -156,12 +169,14 @@ const Login = ({ onRegister, onLogin }) => {
               </>
             ) : (
               <>
-                <InputField
-                  type="email"
-                  placeholder="Correo electrónico"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
+                <div className="my-7">
+                  <InputField
+                    type="email"
+                    placeholder="Correo electrónico"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
                 <InputField
                   type="password"
                   placeholder="Contraseña"
@@ -184,7 +199,11 @@ const Login = ({ onRegister, onLogin }) => {
             </div>
           ) : (
             <div className="flex mt-6 mb-2 justify-between">
-              <Button text="Iniciar Sesión" styleType="primary" onClick={handleLogin} />
+              <Button
+                text="Iniciar Sesión"
+                styleType="primary"
+                onClick={handleLogin}
+              />
               <Button
                 text="Crear Cuenta"
                 styleType="secondary"
