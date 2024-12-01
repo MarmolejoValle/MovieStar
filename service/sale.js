@@ -56,4 +56,31 @@ exports.addSale = async (period, idMovie, price, idUser) => {
         }
     });
 };
+exports.clientCheck = async (idMovie,idUser) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //Conexion a la base de datos
+            const db = await mysql.connect();
+            //Query de la base de datos con una view
+            await db.execute(`select  * from sale s where s.id_movie = '${idMovie}' and s.user_fk = ${idUser} and s.date_end > now();`, (err, rows) => {
+                //Comprobaion de errores
+                if (err) throw err
+                //Comprobacin de elementos 
+                if (rows.length > 0) {
+                    //Respuesta del query
+                    resolve({"check":true});
+                    return
+                }
+                //Error por si no existe usuario
+                resolve({"check":false});
+                return
 
+            });
+
+
+        }
+        catch (error) {
+            reject(error);
+        }
+    });
+};

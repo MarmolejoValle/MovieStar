@@ -38,3 +38,20 @@ exports.postAddSale = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+exports.postclientCheck = async (req, res) => {
+    try {
+        //Paremetros de body json
+        const idUser = req.body.idUser;
+        const idMovie = req.body.idMovie;
+        if (!idMovie || !idUser  ) throw new Error('Faltan algunos datos')
+
+        //Utilizacion del servicio de libreria
+        const response = await saleService.clientCheck(idMovie,idUser);
+
+        //Respuesta en json
+        res.json(response);
+    } catch (error) {
+        //Respuesta de error
+        res.status(500).json({ error: error.message });
+    }
+};
