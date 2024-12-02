@@ -16,6 +16,8 @@ const DetailScreen = () => {
   const genre = queryParams.get("genre") || "No especificado";
   const rating = queryParams.get("rating") || "Sin clasificar";
   const name = queryParams.get("name") || "Sin nombre";
+  const discount = parseFloat(queryParams.get("discount")) || 0;
+  const typeDiscount = queryParams.get("typeDiscount") || "Sin descuento";
 
   const [activeTab, setActiveTab] = useState("DETALLES");
   const [fade, setFade] = useState(true);
@@ -28,16 +30,35 @@ const DetailScreen = () => {
     releaseDate !== "N/A" ? parseInt(releaseDate.split("-")[0]) : currentYear;
   const yearsOld = releaseYear ? currentYear - releaseYear : 0;
 
-  const calculatePrice = (basePrice) => {
-    const discountRate = 0.02; // 2% de descuento por año
-    const discount = yearsOld * discountRate * basePrice;
-    return Math.max(basePrice - discount, basePrice * 0.5); // Precio mínimo al 50% del original
+  const calculatePrice = (basePrice, option) => {
+    const discountRate = 0.02; // 2% de descuento anual
+    const timeDiscount = yearsOld * discountRate * basePrice; // Descuento por antigüedad
+    const priceAfterTimeDiscount = Math.max(
+      basePrice - timeDiscount,
+      basePrice * 0.5
+    ); // Precio mínimo 50%
+
+    // Verificar si el descuento aplica a esta opción
+    const isRent = option.includes("Renta");
+    const isPurchase = option.includes("Compra");
+
+    let finalPrice = priceAfterTimeDiscount;
+
+    if (
+      (typeDiscount === "Renta" && isRent) ||
+      (typeDiscount === "Compra" && isPurchase)
+    ) {
+      finalPrice = priceAfterTimeDiscount * (1 - discount / 100);
+    }
+
+    return finalPrice;
   };
 
+  // Actualizar precios para cada opción
   const prices = {
-    "Renta por 1 semana": calculatePrice(20),
-    "Renta por 1 mes": calculatePrice(70),
-    "Compra Definitiva": calculatePrice(120),
+    "Renta por 1 semana": calculatePrice(20, "Renta por 1 semana"),
+    "Renta por 1 mes": calculatePrice(70, "Renta por 1 mes"),
+    "Compra Definitiva": calculatePrice(120, "Compra Definitiva"),
   };
 
   useEffect(() => {
@@ -234,7 +255,7 @@ const DetailScreen = () => {
                 </div>
               </>
             ) : activeTab === "RESEÑAS" ? (
-              <MovieReviews movieId={title} /> 
+              <MovieReviews movieId={title} />
             ) : null
           ) : (
             <div className="flex justify-center mt-10">
@@ -247,14 +268,29 @@ const DetailScreen = () => {
                     {option}
                   </h3>
                   <div className="w-full text-start pl-3">
-                    <p className="text-sm mt-3 text-gray-500 ">
+                    <p className="text-sm mt-3 text-gray-500">
                       Precio por película o serie
                     </p>
                     <div className="font-bold text-xl mt-2">
-                      ${prices[option].toFixed(2)}
+                      {discount > 0 &&
+                      ((typeDiscount === "Renta" && option.includes("Renta")) ||
+                        (typeDiscount === "Compra" &&
+                          option.includes("Compra"))) ? (
+                        <>
+                          <span className="line-through text-gray-500 mr-2">
+                            ${prices[option].toFixed(2)}
+                          </span>
+                          <span className="text-red-500">
+                            ${calculatePrice(prices[option], option).toFixed(2)}
+                          </span>
+                        </>
+                      ) : (
+                        `$${prices[option].toFixed(2)}`
+                      )}
                       <hr className="border-gray-600 mt-1" />
                     </div>
                   </div>
+
                   <div className="justify-center flex mt-10">
                     <Button
                       text="Comprar"
@@ -353,7 +389,14 @@ const DetailScreen = () => {
             <div className="mb-4">
               <p className="text-lg font-medium">
                 <strong>Total a pagar:</strong> $
-                {prices[selectedOption]?.toFixed(2)}
+                {(typeDiscount === "Renta" &&
+                  selectedOption.includes("Renta")) ||
+                (typeDiscount === "Compra" && selectedOption.includes("Compra"))
+                  ? calculatePrice(
+                      prices[selectedOption],
+                      selectedOption
+                    ).toFixed(2)
+                  : prices[selectedOption]?.toFixed(2)}
               </p>
               <p className="font-extralight text-sm text-rojosecundario">
                 Para mayor seguridad, los datos de tu tarjeta no seran guardados

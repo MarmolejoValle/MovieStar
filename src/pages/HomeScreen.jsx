@@ -25,7 +25,6 @@ const HomeScreen = () => {
           "http://192.168.1.234:2003/api/promotion/viewAll"
         );
         const result = await response.json();
-        console.log(result);
 
         const today = new Date();
         const activePromotions = result.filter((promo) => {
@@ -41,6 +40,7 @@ const HomeScreen = () => {
                 `https://www.omdbapi.com/?apikey=${API_KEY}&i=${promo.id_movie}`
               );
               const movieData = await movieResponse.json();
+              
 
               if (movieData.Response === "True") {
                 return {
@@ -179,7 +179,8 @@ const HomeScreen = () => {
             Poster: promo.poster,
             Title: promo.title,
             Year: promo.year,
-            Discount: promo.discount, // Si tienes un campo para el descuento
+            Discount: promo.discount,
+            typeDiscount: promo.type,
           }))}
           visibleItems={visibleItems}
           page={promoPage}

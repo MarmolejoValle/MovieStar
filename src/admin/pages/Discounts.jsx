@@ -316,3 +316,5 @@ export const Discounts = () => {
     </>
   );
 };
+
+export default Discounts;

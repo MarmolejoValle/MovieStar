@@ -67,7 +67,7 @@ const MyLibraryScreen = () => {
           setError("Error al obtener la biblioteca del usuario.");
         }
       } catch (err) {
-        setError("Error de conexión con el servidor.");
+        setError("Error de conexión con el servidor.", err);
       } finally {
         setLoading(false);
       }

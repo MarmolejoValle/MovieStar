@@ -87,6 +87,14 @@ const Carousel = ({ items, visibleItems, page, onNext, onPrev }) => {
                     item.date_end
                       ? `&dateEnd=${encodeURIComponent(item.dateEnd)}`
                       : ""
+                  }${
+                    item.discount
+                      ? `&discount=${encodeURIComponent(item.discount)}`
+                      : ""
+                  }${
+                    item.typeDiscount
+                      ? `&typeDiscount=${encodeURIComponent(item.typeDiscount)}`
+                      : ""
                   }`}
                 >
                   <img
