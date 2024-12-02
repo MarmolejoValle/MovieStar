@@ -65,7 +65,7 @@ exports.clientCheck = async (idMovie,idUser) => {
             //Conexion a la base de datos
             const db = await mysql.connect();
             //Query de la base de datos con una view
-            await db.execute(`select  * from sale s where s.id_movie = '${idMovie}' and s.user_fk = ${idUser} and s.date_end > now();`, (err, rows) => {
+            await db.execute(`select  * from sale s where s.id_movie = '${idMovie}' and s.user_fk = ${idUser} and s.date_end > now() or s.sale_type_fk = 2;`, (err, rows) => {
                 //Comprobaion de errores
                 if (err) throw err
                 //Comprobacin de elementos 
