@@ -2,13 +2,12 @@ import React, { Component } from "react";
 import Sidebar from "../components/Sidebar";
 import Footer from "../../components/Footer";
 import { Line } from "../components/graphic";
-import CardRow from "../components/Card";
 export const Graphics = () => {
   return (
     <>
       <div className="flex bg-azulprincipal">
         <Sidebar />
-        <div className="flex-grow ml-10 text-white text-center mb-4">
+        <div className="flex-grow ml-10 text-white text-center">
           <h1 className="mt-16 font-semibold text-5xl">Estadísticas</h1>
           <div className="w-full h-fit flex flex-col justify-start   mt-7 ">
             <div className="p-2  bg-gray-600">
@@ -23,17 +22,12 @@ export const Graphics = () => {
               </div>
             </div>
             <div className="  flex ">
-              <div className="flex-1 ">
-                <CardRow image={'https://cdn1.epicgames.com/offer/b2818b59c0bb420e9647983dfd254931/EGS_Octopus_InsomniacGamesNixxesSoftware_S2_1200x1600-5831c61378872a1fe233b295fbf3140f'} title={'Spiderman'} />
+              <div className="flex-1 bg-slate-50 text-black">
+                f
               </div>
-              <div className="flex-1 text-white mt-10">
-                <div className="w-full p-3 ">
-                  <p className="text-left ml-4 bg-slate-400 p-5 text-xl rounded-sm text-gray-800">Utilidades : <strong>100</strong> </p>
-                </div>
-                <div>
-                  <h4>Ventas</h4>
-                  <Line />
-                </div>
+              <div className="flex-1 text-black mt-10">
+                
+                <Line />
 
               </div>
             </div>
