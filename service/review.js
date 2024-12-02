@@ -34,7 +34,7 @@ exports.viewForMovie = async (id)=>{
             //Conexion a la base de datos
             const db = await mysql.connect();
             //Query de la base de datos con una view
-            await db.execute(`SELECT r.comment,r.rating,r.name FROM review_all r where r.id_movie = ${id}`, (err, rows) => {
+            await db.execute(`SELECT r.comment,r.rating,r.name FROM review_all r where r.id_movie = '${id}'`, (err, rows) => {
                 //Comprobaion de errores
                 if (err) throw err
                 //Comprobacin de elementos 
