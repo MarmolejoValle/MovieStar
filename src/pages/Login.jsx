@@ -71,10 +71,9 @@ const Login = ({ onRegister, onLogin }) => {
     setErrorMessage("");
     onRegister();
 
-    // Comentado el fetch para pruebas sin conexión
-    /*
+   
     try {
-      const response = await fetch("http://192.168.110.255:2003/api/client/createAccount", {
+      const response = await fetch("http://192.168.1.234:2003/api/client/createAccount", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
@@ -90,7 +89,7 @@ const Login = ({ onRegister, onLogin }) => {
     } catch (error) {
       setErrorMessage("Error de conexión con el servidor.");
     }
-    */
+    
   };
 
   return (
