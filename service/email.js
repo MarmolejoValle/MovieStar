@@ -17,7 +17,7 @@ exports.sendMail = (desTo, subject, text) => {
         from: 'moviestarsup@gmail.com',         // Remitente
         to: desTo,     // Destinatario
         subject: subject,        // Asunto del correo
-        text: text  // Cuerpo del mensaje (texto)
+        html: text  // Cuerpo del mensaje (texto)
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
