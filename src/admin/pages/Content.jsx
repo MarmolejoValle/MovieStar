@@ -1,64 +1,56 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Footer from "../../components/Footer";
-import data from "../data/data.json";
 import CardRow from "../components/CardRow";
 
 export const Content = () => {
   const [isMovies, setIsMovies] = useState(true);
-  const [searchQuery, setSearchQuery] = useState(""); // Estado para la búsqueda
-  const [showEditForm, setShowEditForm] = useState(false); // Mostrar el formulario de edición
-  const [selectedItem, setSelectedItem] = useState(null); // Item seleccionado para editar
-  const [editedData, setEditedData] = useState({
-    title: "",
-    genre: "",
-    price: "",
-    duration: "",
-  });
+  const [searchQuery, setSearchQuery] = useState("");
+  const [topSales, setTopSales] = useState([]);
+  const OMDB_API_KEY = "fe327da4"; // Reemplaza con tu clave de API de OMDB
 
-  const currentData = isMovies ? data.movies : data.series;
+  useEffect(() => {
+    const fetchTopSales = async () => {
+      try {
+        // Obtener los 10 productos más vendidos desde el primer endpoint
+        const response = await fetch(
+          "http://192.168.1.234:2003/api/sale/all/1"
+        );
+        const data = await response.json();
 
-  // Filtrar los datos por el término de búsqueda
-  const filteredData = currentData.filter((item) =>
+        // Obtener detalles de cada película/serie desde OMDB
+        const enrichedData = await Promise.all(
+          data.map(async (sale) => {
+            // Obtener la información de la película/serie desde OMDB usando el id_movie
+            const omdbResponse = await fetch(
+              `https://www.omdbapi.com/?i=${sale.id_movie}&apikey=${OMDB_API_KEY}`
+            );
+            const omdbData = await omdbResponse.json();
+
+            return {
+              total: sale.total || 0, // Default a 0 si no existe
+              sales: sale.sales || 0, // Default a 0 si no existe
+              title: omdbData.Title || "Desconocido",
+              genre: omdbData.Genre || "Desconocido",
+              type: omdbData.Type || "Desconocido",
+              image: omdbData.Poster || "https://via.placeholder.com/150",
+            };
+          })
+        );
+
+        setTopSales(enrichedData);
+      } catch (error) {
+        console.error("Error al cargar datos del API:", error);
+      }
+    };
+
+    fetchTopSales();
+  }, []);
+
+  // Filtrar resultados por búsqueda
+  const filteredData = topSales.filter((item) =>
     item.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  const handleEditClick = () => {
-    setShowEditForm(true); // Abrir el modal de edición
-  };
-
-  const handleItemSelect = (event) => {
-    const selected = currentData.find(
-      (item) => item.title === event.target.value
-    );
-    setSelectedItem(selected);
-    setEditedData({
-      title: selected.title,
-      genre: selected.genre,
-      price: selected.price,
-      duration: selected.duration,
-    });
-  };
-
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setEditedData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleSaveChanges = () => {
-    const updatedData = currentData.map((item) =>
-      item.title === selectedItem.title ? { ...item, ...editedData } : item
-    );
-    isMovies ? (data.movies = updatedData) : (data.series = updatedData);
-    setShowEditForm(false); // Cerrar el modal después de guardar los cambios
-  };
-
-  const handleCloseModal = () => {
-    setShowEditForm(false); // Cerrar el modal al hacer clic en la "X"
-  };
 
   return (
     <>
@@ -67,37 +59,11 @@ export const Content = () => {
         <div className="flex-grow ml-28 mr-24 text-white">
           {/* Título */}
           <div className="text-center">
-            <h1 className="mt-16 font-serif text-6xl">Contenido</h1>
+            <h1 className="mt-16 font-serif text-6xl">Contenido más vendido</h1>
           </div>
 
           {/* Header */}
           <div className="flex justify-between items-center mt-10">
-            {/* Switch para Películas/Series */}
-            <div className="flex items-center bg-gray-700 rounded-full p-1 w-40">
-              <button
-                className={`w-1/2 py-1 rounded-full ${isMovies ? "bg-white text-black" : "text-white"}`}
-                onClick={() => setIsMovies(true)}
-              >
-                Películas
-              </button>
-              <button
-                className={`w-1/2 py-1 rounded-full ${!isMovies ? "bg-white text-black" : "text-white"}`}
-                onClick={() => setIsMovies(false)}
-              >
-                Series
-              </button>
-            </div>
-
-            {/* Botón de Editar */}
-            <div className="flex gap-4">
-              <button
-                className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full flex items-center"
-                onClick={handleEditClick}
-              >
-                <span className="mr-2">✏️</span> Editar
-              </button>
-            </div>
-
             {/* Barra de búsqueda */}
             <div className="relative">
               <input
@@ -114,13 +80,13 @@ export const Content = () => {
           {/* Tabla */}
           <div className="mt-12">
             {/* Fila de encabezados */}
-            <div className="flex justify-between bg-gray-800 rounded-lg p-4 text-left font-semibold text-center">
-              <div className="w-1/5"></div>
+            <div className="flex justify-between bg-gray-800 rounded-lg p-4 font-semibold text-center">
+              <div className="w-1/5">Imagen</div>
+              <div className="w-1/5">Total Recaudado</div>
+              <div className="w-1/5">Cantidad Vendida</div>
               <div className="w-1/5">Título</div>
               <div className="w-1/5">Género</div>
-              <div className="w-1/5">Precio</div>
-              <div className="w-1/5">Duración</div>
-              <div className="w-1/5">Calificación</div>
+              <div className="w-1/5">Tipo</div>
             </div>
 
             {/* Cards */}
@@ -128,119 +94,18 @@ export const Content = () => {
               {filteredData.map((item, index) => (
                 <CardRow
                   key={index}
-                  image={item.image}
-                  title={item.title}
-                  genre={item.genre}
-                  price={`$${item.price}`} // Aquí concatenamos el símbolo de dólar
-                  duration={item.duration}
-                  rating={item.rating}
+                  image={item.image} // Imagen de la película o serie
+                  total={`$${item.total}`} // Total recaudado
+                  sales={item.sales} // Cantidad de ventas
+                  title={item.title} // Título de la película o serie
+                  genre={item.genre} // Género de la película o serie
+                  type={item.type} // Tipo de película o serie (Movie/Series)
                 />
               ))}
             </div>
           </div>
         </div>
       </div>
-
-      {/* Modal de Edición */}
-      {showEditForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-gray-900 text-white p-8 rounded-lg shadow-lg w-full max-w-lg relative">
-            {/* Botón de cierre */}
-            <button
-              onClick={handleCloseModal}
-              className="absolute top-4 right-4 text-2xl text-gray-300 hover:text-white"
-            >
-              ×
-            </button>
-            <h2 className="text-2xl font-bold mb-4">Editar {isMovies ? "Película" : "Serie"}</h2>
-            <form>
-              {/* Seleccionar Película o Serie */}
-              <div className="mb-4">
-                <label className="block text-sm mb-2">Seleccionar {isMovies ? "Película" : "Serie"}</label>
-                <select
-                  className="w-full p-2 bg-gray-800 border border-gray-700 rounded-lg"
-                  onChange={handleItemSelect}
-                  value={selectedItem ? selectedItem.title : ""}
-                >
-                  <option value="">Seleccione una opción</option>
-                  {currentData.map((item) => (
-                    <option key={item.title} value={item.title}>
-                      {item.title}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Campos de edición */}
-              {selectedItem && (
-                <>
-                  <div className="mb-4">
-                    <label className="block text-sm mb-2">Título</label>
-                    <input
-                      type="text"
-                      name="title"
-                      value={editedData.title}
-                      onChange={handleInputChange}
-                      className="w-full p-2 bg-gray-800 border border-gray-700 rounded-lg"
-                    />
-                  </div>
-
-                  <div className="mb-4">
-                    <label className="block text-sm mb-2">Género</label>
-                    <input
-                      type="text"
-                      name="genre"
-                      value={editedData.genre}
-                      onChange={handleInputChange}
-                      className="w-full p-2 bg-gray-800 border border-gray-700 rounded-lg"
-                    />
-                  </div>
-
-                  <div className="mb-4">
-                    <label className="block text-sm mb-2">Precio</label>
-                    <input
-                      type="number"
-                      name="price"
-                      value={editedData.price}
-                      onChange={handleInputChange}
-                      className="w-full p-2 bg-gray-800 border border-gray-700 rounded-lg"
-                    />
-                  </div>
-
-                  <div className="mb-4">
-                    <label className="block text-sm mb-2">Duración</label>
-                    <input
-                      type="text"
-                      name="duration"
-                      value={editedData.duration}
-                      onChange={handleInputChange}
-                      className="w-full p-2 bg-gray-800 border border-gray-700 rounded-lg"
-                    />
-                  </div>
-
-                  {/* Botones de cancelar y guardar */}
-                  <div className="flex justify-between">
-                    <button
-                      type="button"
-                      onClick={() => setShowEditForm(false)}
-                      className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-full"
-                    >
-                      Cancelar
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleSaveChanges}
-                      className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-full"
-                    >
-                      Guardar cambios
-                    </button>
-                  </div>
-                </>
-              )}
-            </form>
-          </div>
-        </div>
-      )}
 
       <Footer />
     </>

@@ -1,9 +1,10 @@
 import React from "react";
 
-const InputField = ({ type, placeholder, value, onChange }) => {
+const InputField = ({ type, placeholder, value, onChange, name }) => {
   return (
     <input
       type={type}
+      name={name} // Agregar el atributo name
       placeholder={placeholder}
       value={value}
       onChange={onChange}

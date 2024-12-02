@@ -3,7 +3,7 @@ import { useParams, useLocation } from "react-router-dom";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
 import InputField from "../components/InputField";
-import { BsBack } from "react-icons/bs";
+import MovieReviews from "../components/MovieReviews";
 
 const DetailScreen = () => {
   const { title } = useParams();
@@ -15,6 +15,7 @@ const DetailScreen = () => {
   const releaseDate = queryParams.get("releaseDate") || "N/A";
   const genre = queryParams.get("genre") || "No especificado";
   const rating = queryParams.get("rating") || "Sin clasificar";
+  const name = queryParams.get("name") || "Sin nombre";
 
   const [activeTab, setActiveTab] = useState("DETALLES");
   const [fade, setFade] = useState(true);
@@ -22,13 +23,51 @@ const DetailScreen = () => {
   const [showForm, setShowForm] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
 
+  const currentYear = new Date().getFullYear();
+  const releaseYear =
+    releaseDate !== "N/A" ? parseInt(releaseDate.split("-")[0]) : currentYear;
+  const yearsOld = releaseYear ? currentYear - releaseYear : 0;
+
+  const calculatePrice = (basePrice) => {
+    const discountRate = 0.02; // 2% de descuento por año
+    const discount = yearsOld * discountRate * basePrice;
+    return Math.max(basePrice - discount, basePrice * 0.5); // Precio mínimo al 50% del original
+  };
+
+  const prices = {
+    "Renta por 1 semana": calculatePrice(20),
+    "Renta por 1 mes": calculatePrice(70),
+    "Compra Definitiva": calculatePrice(120),
+  };
+
   useEffect(() => {
     const checkPurchaseStatus = async () => {
       try {
-        const response = await fetch(`/api/user/purchases?title=${title}`);
+        const userId = localStorage.getItem("userId"); // Obtener el id del usuario desde localStorage
+        const idMovie = title; // Suponiendo que `title` es el id de la película
+
+        if (!userId || !idMovie) {
+          console.error("Faltan datos para verificar la compra.");
+          return;
+        }
+
+        const response = await fetch(
+          "http://192.168.1.234:2003/api/sale/check",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              idMovie,
+              idUser: userId,
+            }),
+          }
+        );
+
         if (response.ok) {
           const data = await response.json();
-          setIsPurchased(data.isPurchased);
+          setIsPurchased(data.check); // Actualizar el estado con el valor de `check`
         } else {
           console.error("Error al verificar el estado de compra.");
         }
@@ -53,11 +92,59 @@ const DetailScreen = () => {
     setShowForm(true);
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    // Lógica para procesar la compra
-    console.log("Procesando compra...");
-    setShowForm(false);
+
+    const userId = localStorage.getItem("userId"); // Obtener el id del usuario desde localStorage
+    const email = e.target.email.value; // Obtener el email del formulario
+    const price = prices[selectedOption]; // Obtener el precio seleccionado
+
+    // Mapear las opciones de periodo
+    const periodMap = {
+      "Renta por 1 semana": "week",
+      "Renta por 1 mes": "month",
+      "Compra Definitiva": "purchase",
+    };
+
+    const period = periodMap[selectedOption]; // Mapear la opción seleccionada al formato requerido
+
+    if (!userId || !email || !price || !period) {
+      alert("Por favor, completa todos los campos correctamente.");
+      return;
+    }
+
+    const payload = {
+      period,
+      idMovie: title,
+      price,
+      idUser: userId,
+      email,
+    };
+
+    try {
+      const response = await fetch("http://192.168.1.234:2003/api/sale/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("dataCompra: ", data);
+
+        alert("Compra realizada exitosamente");
+        setShowForm(false); // Cerrar el formulario modal
+      } else {
+        const error = await response.json();
+        console.error("Error en la compra:", error);
+        alert("Ocurrió un error al realizar la compra. Inténtalo nuevamente.");
+      }
+    } catch (err) {
+      console.error("Error al conectarse con el servidor:", err);
+      alert("No se pudo conectar con el servidor. Inténtalo más tarde.");
+    }
   };
 
   return (
@@ -72,7 +159,7 @@ const DetailScreen = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-azulprincipal"></div>
         </div>
         <div className="relative">
-          <div className="absolute bottom-5 left-5 flex w-1/6 justify-evenly">
+          <div className="absolute bottom-5 left-5 flex w-2/6 justify-evenly">
             <h1
               onClick={() => handleTabChange("DETALLES")}
               className={`cursor-pointer text-xl transition-all ${
@@ -91,6 +178,16 @@ const DetailScreen = () => {
                 VER AHORA
               </h1>
             )}
+            {isPurchased && (
+              <h1
+                onClick={() => handleTabChange("RESEÑAS")}
+                className={`cursor-pointer text-xl transition-all ${
+                  activeTab === "RESEÑAS" ? "font-extrabold" : "text-white"
+                }`}
+              >
+                RESEÑAS
+              </h1>
+            )}
           </div>
           <hr className="border-t border-gray-300 mx-10" />
         </div>
@@ -102,7 +199,7 @@ const DetailScreen = () => {
           {isPurchased ? (
             activeTab === "DETALLES" ? (
               <>
-                <h1 className="text-4xl font-bold">{title}</h1>
+                <h1 className="text-4xl font-bold">{name}</h1>
                 <p className="text-lg mt-7 mr-5">{description}</p>
                 <div className="flex md:flex-row mr-36 mt-8">
                   <div className="mt-7 flex w-full justify-between">
@@ -121,27 +218,27 @@ const DetailScreen = () => {
                   </div>
                 </div>
               </>
-            ) : (
-              <div className="w-full flex justify-center">
-                <iframe
-                  width="50%"
-                  height="500"
-                  src="https://www.youtube.com/embed/mXd1zTwcQ18?si=uF3feHVSf02FEMbL"
-                  title="YouTube video player"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  allowFullScreen
-                ></iframe>
-              </div>
-            )
+            ) : activeTab === "VER AHORA" ? (
+              <>
+                <div className="w-full flex justify-center">
+                  <iframe
+                    width="50%"
+                    height="500"
+                    src="https://www.youtube.com/embed/mXd1zTwcQ18?si=uF3feHVSf02FEMbL"
+                    title="YouTube video player"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              </>
+            ) : activeTab === "RESEÑAS" ? (
+              <MovieReviews movieId={title} /> 
+            ) : null
           ) : (
             <div className="flex justify-center mt-10">
-              {[
-                "Renta por 1 semana",
-                "Renta por 1 mes",
-                "Compra Definitiva",
-              ].map((option, index) => (
+              {Object.keys(prices).map((option, index) => (
                 <div
                   key={index}
                   className="bg-white text-black border p-3 rounded-xl text-center shadow-lg mx-20 w-1/6"
@@ -154,18 +251,13 @@ const DetailScreen = () => {
                       Precio por película o serie
                     </p>
                     <div className="font-bold text-xl mt-2">
-                      $
-                      {option === "Renta por 1 semana"
-                        ? "20"
-                        : option === "Renta por 1 mes"
-                        ? "70"
-                        : "120"}
+                      ${prices[option].toFixed(2)}
                       <hr className="border-gray-600 mt-1" />
                     </div>
                   </div>
                   <div className="justify-center flex mt-10">
                     <Button
-                      text="Seleccionar"
+                      text="Comprar"
                       styleType="primary"
                       onClick={() => handlePurchase(option)}
                     />
@@ -225,40 +317,48 @@ const DetailScreen = () => {
             </div>
             <div className="px-3 mb-4">
               <label className=" text-lg font-semibold">Email</label>
-              <InputField type="text" placeholder="alguien@example.com" />
+              <InputField
+                type="text"
+                name={"email"}
+                placeholder="alguien@example.com"
+              />
             </div>
             <div className="px-3 mb-4">
               <label className=" text-lg font-semibold">
                 Número de Tarjeta
               </label>
-              <InputField type="text" placeholder="****************" />
+              <InputField
+                type="text"
+                name={"cardNumber"}
+                placeholder="****************"
+              />
             </div>
             <div className="mb-4 flex justify-between">
               <div className="px-3">
                 <label className=" text-lg font-semibold">
                   Fecha de Expiración
                 </label>
-                <InputField type="date" placeholder="" />
+                <InputField
+                  type="date"
+                  name={"expirationDate"}
+                  placeholder=""
+                />
               </div>
               <div className="px-3">
                 <label className=" text-lg font-semibold">CVV</label>
-                <InputField type="text" placeholder="***" />
+                <InputField type="text" name={"cvv"} placeholder="***" />
               </div>
             </div>
             <hr className="border-gray-600 mt-7 mb-3" />
             <div className="mb-4">
               <p className="text-lg font-medium">
                 <strong>Total a pagar:</strong> $
-                {selectedOption === "Renta por 1 semana"
-                  ? "20"
-                  : selectedOption === "Renta por 1 mes"
-                  ? "70"
-                  : "120"}
+                {prices[selectedOption]?.toFixed(2)}
               </p>
               <p className="font-extralight text-sm text-rojosecundario">
-              Para mayor seguridad, los datos de tu tarjeta no seran guardados
-              en la aplicación.
-            </p>
+                Para mayor seguridad, los datos de tu tarjeta no seran guardados
+                en la aplicación.
+              </p>
             </div>
             <hr className="border-gray-600 mt-3 mb-7" />
             <div className="flex justify-center">

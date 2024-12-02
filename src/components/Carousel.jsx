@@ -23,11 +23,6 @@ const Carousel = ({ items, visibleItems, page, onNext, onPrev }) => {
   const handleMouseUp = () => {
     if (!isDragging) return;
     setIsDragging(false);
-    if (currentTranslate > 50) {
-      onPrev();
-    } else if (currentTranslate < -50) {
-      onNext();
-    }
     setCurrentTranslate(0);
   };
 
@@ -63,8 +58,6 @@ const Carousel = ({ items, visibleItems, page, onNext, onPrev }) => {
           ref={containerRef}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
-          onTouchStart={handleMouseDown}
-          onTouchMove={handleMouseMove}
         >
           <div
             className={`flex transition-transform duration-500 ease-in-out ${
@@ -80,21 +73,37 @@ const Carousel = ({ items, visibleItems, page, onNext, onPrev }) => {
             {items.map((item, index) => (
               <div key={index} className="min-w-[300px] p-2">
                 <Link
-                  to={`/detalle/${item.title}?image=${encodeURIComponent(
-                    item.image
+                  to={`/detalle/${item.imdbID}?image=${encodeURIComponent(
+                    item.Poster
                   )}&description=${encodeURIComponent(
-                    item.description
+                    item.Plot || item.Description
                   )}&releaseDate=${encodeURIComponent(
-                    item.releaseDate
+                    item.Year
                   )}&genre=${encodeURIComponent(
-                    item.genre
-                  )}&rating=${encodeURIComponent(item.rating)}`}
+                    item.Genre || item.Type
+                  )}&rating=${encodeURIComponent(
+                    item.imdbRating || "N/A"
+                  )}&name=${encodeURIComponent(item.Title || "N/A")}${
+                    item.date_end
+                      ? `&dateEnd=${encodeURIComponent(item.dateEnd)}`
+                      : ""
+                  }`}
                 >
                   <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full h-40 rounded-lg"
+                    src={item.Poster}
+                    alt={item.Title}
+                    className="w-full h-40 rounded-lg object-cover"
                   />
+                  <h3 className="mt-2 text-center text-xl font-semibold">
+                    {item.Title}
+                  </h3>
+                  {/* Mostrar fecha de fin de renta solo si está disponible */}
+                  {item.dateEnd && (
+                    <p className="text-sm text-center text-gray-400">
+                      Fin de renta:{" "}
+                      {new Date(item.dateEnd).toLocaleDateString()}
+                    </p>
+                  )}
                 </Link>
               </div>
             ))}

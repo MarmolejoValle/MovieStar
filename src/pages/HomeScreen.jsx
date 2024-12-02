@@ -4,168 +4,133 @@ import Button from "../components/Button";
 import Carousel from "../components/Carousel";
 
 const HomeScreen = () => {
+  const [seriesList, setSeriesList] = useState([]);
+  const [moviesList, setMoviesList] = useState([]);
+  const [promotionsList, setPromotionsList] = useState([]);
+  const [genreLists, setGenreLists] = useState({});
   const [seriesPage, setSeriesPage] = useState(0);
   const [moviesPage, setMoviesPage] = useState(0);
+  const [promoPage, setPromoPage] = useState(0);
   const [visibleItems, setVisibleItems] = useState(5);
+  const [loading, setLoading] = useState(true);
 
-  const seriesList = [
-    {
-      title: "Breaking Bad",
-      image: "/series/breakingbad.jpg",
-      description:
-        "Breaking Bad es una serie dramática que sigue la transformación de Walter White, un profesor de química convertido en narcotraficante, después de ser diagnosticado con cáncer. A medida que se involucra en el mundo de las drogas, su vida  y la de su familia se ven profundamente afectadas. La serie destaca por su narrativa intensa, desarrollo de personajes complejos, y un enfoque en temas como la ambición, la moralidad y la consecuencia de las decisiones. Protagonizada por Bryan Cranston y Aaron Paul, es considerada una de las mejores series de la televisión.",
-      releaseDate: "2008",
-      genre: "Drama criminal, Suspenso",
-      rating: "+18",
-    },
-    {
-      title: "The Office",
-      image: "/series/theoffice.png",
-      description:
-        "The Office es una comedia que sigue el día a día en una oficina, liderada por el excéntrico Michael Scott.",
-      releaseDate: "2005",
-      genre: "Comedia, Sitcom",
-      rating: "Todo público",
-    },
-    {
-      title: "The Big Bang Theory",
-      image: "/series/bigbang.png",
-      description:
-        "Una serie cómica que narra las experiencias de un grupo de amigos nerds mientras exploran el amor, la amistad y la ciencia.",
-      releaseDate: "2007",
-      genre: "Comedia, Sitcom",
-      rating: "Todo público",
-    },
-    {
-      title: "Better Call Saul",
-      image: "/series/bettercallsaul.png",
-      description:
-        "Precuela de Breaking Bad que explora la vida de Jimmy McGill antes de convertirse en el abogado Saul Goodman.",
-      releaseDate: "2015",
-      genre: "Drama, Crimen",
-      rating: "+18",
-    },
-    {
-      title: "Peaky Blinders",
-      image: "/series/peakyblinders.png",
-      description:
-        "Un drama histórico que sigue a la familia Shelby, un clan de gánsteres en el Birmingham de principios del siglo XX.",
-      releaseDate: "2013",
-      genre: "Drama histórico, Crimen",
-      rating: "+16",
-    },
-    {
-      title: "Friends",
-      image: "/series/friends.png",
-      description:
-        "Una comedia sobre un grupo de amigos que navegan por la vida y el amor en Nueva York.",
-      releaseDate: "1994",
-      genre: "Comedia, Sitcom",
-      rating: "Todo público",
-    },
-    {
-      title: "Stranger Things",
-      image: "/series/strangerthings.png",
-      description:
-        "Una serie de ciencia ficción que mezcla misterio y aventuras cuando un grupo de niños descubre experimentos secretos del gobierno.",
-      releaseDate: "2016",
-      genre: "Ciencia ficción, Suspenso",
-      rating: "+13",
-    },
-  ];
+  const API_KEY = "fe327da4"; // Reemplaza con tu API Key de OMDb
+  // const genres = ["Action", "Comedy", "Drama", "Horror", "Sci-Fi"];
+  const genres = ["Action"];
 
-  const moviesList = [
-    {
-      title: "About Time",
-      image: "/peliculas/abouttime.png",
-      description:
-        "Una emotiva película sobre un hombre que descubre que puede viajar en el tiempo y utiliza este poder para mejorar su vida amorosa.",
-      releaseDate: "2013",
-      genre: "Romance, Fantasía",
-      rating: "Todo público",
-    },
-    {
-      title: "Father",
-      image: "/peliculas/father.png",
-      description:
-        "Un drama conmovedor sobre un hombre mayor que lucha contra la pérdida de la memoria mientras su hija trata de apoyarlo.",
-      releaseDate: "2020",
-      genre: "Drama",
-      rating: "+13",
-    },
-    {
-      title: "Tokyo Drift",
-      image: "/peliculas/tokyodrift.png",
-      description:
-        "La tercera entrega de la franquicia Rápidos y Furiosos, que lleva las carreras ilegales al mundo de Tokio.",
-      releaseDate: "2006",
-      genre: "Acción, Aventura",
-      rating: "Todo público",
-    },
-    {
-      title: "Spider-Man",
-      image: "/peliculas/spiderman.png",
-      description:
-        "La historia de Peter Parker, quien obtiene poderes arácnidos y lucha contra el crimen como Spider-Man.",
-      releaseDate: "2002",
-      genre: "Acción, Aventura",
-      rating: "Todo público",
-    },
-    {
-      title: "Avengers",
-      image: "/peliculas/avengers.png",
-      description:
-        "Un grupo de superhéroes se une para proteger al mundo de amenazas inimaginables.",
-      releaseDate: "2012",
-      genre: "Acción, Ciencia ficción",
-      rating: "Todo público",
-    },
-    {
-      title: "About Time",
-      image: "/peliculas/abouttime.png",
-      description:
-        "Una emotiva película sobre un hombre que descubre que puede viajar en el tiempo y utiliza este poder para mejorar su vida amorosa.",
-      releaseDate: "2013",
-      genre: "Romance, Fantasía",
-      rating: "Todo público",
-    },
-    {
-      title: "Father",
-      image: "/peliculas/father.png",
-      description:
-        "Un drama conmovedor sobre un hombre mayor que lucha contra la pérdida de la memoria mientras su hija trata de apoyarlo.",
-      releaseDate: "2020",
-      genre: "Drama",
-      rating: "+13",
-    },
-    {
-      title: "Tokyo Drift",
-      image: "/peliculas/tokyodrift.png",
-      description:
-        "La tercera entrega de la franquicia Rápidos y Furiosos, que lleva las carreras ilegales al mundo de Tokio.",
-      releaseDate: "2006",
-      genre: "Acción, Aventura",
-      rating: "Todo público",
-    },
-    {
-      title: "Spider-Man",
-      image: "/peliculas/spiderman.png",
-      description:
-        "La historia de Peter Parker, quien obtiene poderes arácnidos y lucha contra el crimen como Spider-Man.",
-      releaseDate: "2002",
-      genre: "Acción, Aventura",
-      rating: "Todo público",
-    },
-    {
-      title: "Avengers",
-      image: "/peliculas/avengers.png",
-      description:
-        "Un grupo de superhéroes se une para proteger al mundo de amenazas inimaginables.",
-      releaseDate: "2012",
-      genre: "Acción, Ciencia ficción",
-      rating: "Todo público",
-    },
-  ];
+  useEffect(() => {
+    const fetchPromotions = async () => {
+      try {
+        const response = await fetch(
+          "http://192.168.1.234:2003/api/promotion/viewAll"
+        );
+        const result = await response.json();
+        console.log(result);
+
+        const today = new Date();
+        const activePromotions = result.filter((promo) => {
+          const startDate = new Date(promo.date_start);
+          const endDate = new Date(promo.date_end);
+          return today >= startDate && today <= endDate;
+        });
+
+        const promosWithDetails = await Promise.all(
+          activePromotions.map(async (promo) => {
+            try {
+              const movieResponse = await fetch(
+                `https://www.omdbapi.com/?apikey=${API_KEY}&i=${promo.id_movie}`
+              );
+              const movieData = await movieResponse.json();
+
+              if (movieData.Response === "True") {
+                return {
+                  ...promo,
+                  title: movieData.Title,
+                  poster: movieData.Poster,
+                  year: movieData.Year,
+                };
+              }
+              return null;
+            } catch (error) {
+              console.error(
+                "Error fetching movie details for promotion:",
+                error
+              );
+              return null;
+            }
+          })
+        );
+
+        setPromotionsList(promosWithDetails.filter((promo) => promo !== null));
+      } catch (error) {
+        console.error("Error fetching promotions:", error);
+      }
+    };
+
+    const fetchRandomData = async (type) => {
+      const randomWords = ["avengers", "man", "dark", "game", "war"];
+      let attempts = 0;
+      let data = [];
+
+      while (attempts < 5 && data.length === 0) {
+        try {
+          const randomWord =
+            randomWords[Math.floor(Math.random() * randomWords.length)];
+          const response = await fetch(
+            `https://www.omdbapi.com/?apikey=${API_KEY}&s=${randomWord}&type=${type}`
+          );
+          const result = await response.json();
+
+          if (result.Response === "True") {
+            data = result.Search.sort(() => Math.random() - 0.5).slice(0, 10);
+          } else {
+            attempts++;
+          }
+        } catch (error) {
+          console.error("Error fetching random data:", error);
+          attempts++;
+        }
+      }
+
+      return data;
+    };
+
+    const fetchContent = async () => {
+      setLoading(true);
+      const seriesData = await fetchRandomData("series");
+      const moviesData = await fetchRandomData("movie");
+      const genreData = {};
+
+      for (const genre of genres) {
+        try {
+          const response = await fetch(
+            `https://www.omdbapi.com/?apikey=${API_KEY}&s=${genre}&type=movie`
+          );
+          const result = await response.json();
+
+          if (result.Response === "True") {
+            genreData[genre] = result.Search.sort(
+              () => Math.random() - 0.5
+            ).slice(0, 10);
+          } else {
+            genreData[genre] = [];
+          }
+        } catch (error) {
+          console.error(`Error fetching genre data for ${genre}:`, error);
+          genreData[genre] = [];
+        }
+      }
+
+      await fetchPromotions();
+
+      setSeriesList(seriesData);
+      setMoviesList(moviesData);
+      setGenreLists(genreData);
+      setLoading(false);
+    };
+
+    fetchContent();
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -179,11 +144,19 @@ const HomeScreen = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const totalPromoPages = Math.ceil(promotionsList.length / visibleItems);
   const totalSeriesPages = Math.ceil(seriesList.length / visibleItems);
   const totalMoviesPages = Math.ceil(moviesList.length / visibleItems);
 
+  if (loading) {
+    return (
+      <div className="text-white text-center mt-10">Cargando contenido...</div>
+    );
+  }
+
   return (
     <div className="bg-azulprincipal text-white">
+      {/* Imagen destacada */}
       <div
         className="relative h-[60vh] bg-cover bg-center"
         style={{ backgroundImage: "url('/peliculas/yourname_background.png')" }}
@@ -195,10 +168,43 @@ const HomeScreen = () => {
         </div>
       </div>
 
+      {/* Carrusel de promociones */}
+      <div className="my-6">
+        <h2 className="text-4xl font-semibold mb-6 ml-8">
+          Series y películas en promoción
+        </h2>
+        <Carousel
+          items={promotionsList.map((promo) => ({
+            ...promo,
+            Poster: promo.poster,
+            Title: promo.title,
+            Year: promo.year,
+            Discount: promo.discount, // Si tienes un campo para el descuento
+          }))}
+          visibleItems={visibleItems}
+          page={promoPage}
+          onNext={() =>
+            setPromoPage((prev) => (prev + 1 < totalPromoPages ? prev + 1 : 0))
+          }
+          onPrev={() =>
+            setPromoPage(
+              (prev) => (prev - 1 + totalPromoPages) % totalPromoPages
+            )
+          }
+        />
+      </div>
+
+      {/* Carrusel de series */}
       <div className="my-6">
         <h2 className="text-4xl font-semibold mb-6 ml-8">Series para ti</h2>
         <Carousel
-          items={seriesList}
+          items={seriesList.map((item) => ({
+            ...item,
+            imageUrl: item.Poster,
+            title: item.Title,
+            year: item.Year,
+            imdbID: item.imdbID,
+          }))}
           visibleItems={visibleItems}
           page={seriesPage}
           onNext={() =>
@@ -214,10 +220,17 @@ const HomeScreen = () => {
         />
       </div>
 
+      {/* Carrusel de películas */}
       <div className="my-6">
         <h2 className="text-4xl font-semibold mb-6 ml-8">Películas para ti</h2>
         <Carousel
-          items={moviesList}
+          items={moviesList.map((item) => ({
+            ...item,
+            imageUrl: item.Poster,
+            title: item.Title,
+            year: item.Year,
+            imdbID: item.imdbID,
+          }))}
           visibleItems={visibleItems}
           page={moviesPage}
           onNext={() =>
@@ -232,6 +245,23 @@ const HomeScreen = () => {
           }
         />
       </div>
+
+      {/* Carruseles por género */}
+      {Object.entries(genreLists).map(([genre, items]) => (
+        <div className="my-6" key={genre}>
+          <h2 className="text-4xl font-semibold mb-6 ml-8">{genre}</h2>
+          <Carousel
+            items={items.map((item) => ({
+              ...item,
+              imageUrl: item.Poster,
+              title: item.Title,
+              year: item.Year,
+              imdbID: item.imdbID,
+            }))}
+            visibleItems={visibleItems}
+          />
+        </div>
+      ))}
 
       <Footer />
     </div>

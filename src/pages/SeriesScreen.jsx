@@ -4,153 +4,41 @@ import Button from "../components/Button";
 import Carousel from "../components/Carousel";
 
 const SeriesScreen = () => {
+  const [seriesLists, setSeriesLists] = useState({});
   const [visibleItems, setVisibleItems] = useState(5);
-  const [carouselStates, setCarouselStates] = useState({
-    series: 0,
-    drama: 0,
-    comedy: 0,
-    thriller: 0,
-  });
+  const [loading, setLoading] = useState(true);
 
-  const seriesByGenre = {
-    drama: [
-      {
-        "title": "Breaking Bad",
-        "image": "/series/breakingbad.jpg",
-        "description": "Breaking Bad es una serie dramática que sigue la transformación de Walter White, un profesor de química convertido en narcotraficante, después de ser diagnosticado con cáncer. A medida que se involucra en el mundo de las drogas, su vida  y la de su familia se ven profundamente afectadas. La serie destaca por su narrativa intensa, desarrollo de personajes complejos, y un enfoque en temas como la ambición, la moralidad y la consecuencia de las decisiones. Protagonizada por Bryan Cranston y Aaron Paul, es considerada una de las mejores series de la televisión.",
-        "releaseDate": "2008",
-        "genre": "Drama, Thriller, Crimen",
-        "rating": "+16"
-      },
-      {
-        "title": "Better Call Saul",
-        "image": "/series/bettercallsaul.png",
-        "description": "Better Call Saul es una precuela de Breaking Bad que narra la evolución de Jimmy McGill, un abogado de poca monta que se convierte en el inescrupuloso Saul Goodman. La serie combina drama legal con momentos de humor negro.",
-        "releaseDate": "2015",
-        "genre": "Drama, Crimen",
-        "rating": "+16"
-      },
-      {
-        "title": "Peaky Blinders",
-        "image": "/series/peakyblinders.png",
-        "description": "Peaky Blinders sigue las hazañas de la familia Shelby en el Birmingham de la posguerra. Conocidos por sus trajes elegantes y su brutalidad, los Shelby buscan expandir su imperio mientras enfrentan enemigos y traiciones.",
-        "releaseDate": "2013",
-        "genre": "Drama, Crimen, Histórico",
-        "rating": "+16"
-      },
-      {
-        "title": "Stranger Things",
-        "image": "/series/strangerthings.png",
-        "description": "Stranger Things combina ciencia ficción y nostalgia ochentera en una historia donde un grupo de niños se enfrenta a fenómenos paranormales y monstruos provenientes de otra dimensión, conocida como 'El Otro Lado'.",
-        "releaseDate": "2016",
-        "genre": "Drama, Ciencia Ficción, Misterio",
-        "rating": "+13"
-      }
-    ],
-    comedy: [
-      {
-        "title": "The Office",
-        "image": "/series/theoffice.png",
-        "description": "The Office es una comedia de estilo documental que sigue la vida cotidiana de los empleados de Dunder Mifflin, una empresa de papel. Con momentos incómodos y personajes entrañables, la serie se ha convertido en un clásico moderno.",
-        "releaseDate": "2005",
-        "genre": "Comedia",
-        "rating": "Todo público"
-      },
-      {
-        "title": "The Big Bang Theory",
-        "image": "/series/bigbang.png",
-        "description": "The Big Bang Theory es una comedia que narra las vidas de un grupo de amigos nerds y su interacción con el mundo social, especialmente con Penny, su vecina y opuesta en muchos sentidos.",
-        "releaseDate": "2007",
-        "genre": "Comedia",
-        "rating": "Todo público"
-      },
-      {
-        "title": "Friends",
-        "image": "/series/friends.png",
-        "description": "Friends es una icónica comedia que sigue las vidas de seis amigos en Nueva York. A lo largo de diez temporadas, exploran relaciones, carreras y la complejidad de la amistad adulta.",
-        "releaseDate": "1994",
-        "genre": "Comedia, Romance",
-        "rating": "Todo público"
-      }
-    ],
-    thriller: [
-      {
-        "title": "Breaking Bad",
-        "image": "/series/breakingbad.jpg",
-        "description": "Breaking Bad es una serie dramática que sigue la transformación de Walter White, un profesor de química convertido en narcotraficante, después de ser diagnosticado con cáncer. A medida que se involucra en el mundo de las drogas, su vida  y la de su familia se ven profundamente afectadas. La serie destaca por su narrativa intensa, desarrollo de personajes complejos, y un enfoque en temas como la ambición, la moralidad y la consecuencia de las decisiones. Protagonizada por Bryan Cranston y Aaron Paul, es considerada una de las mejores series de la televisión.",
-        "releaseDate": "2008",
-        "genre": "Drama, Thriller, Crimen",
-        "rating": "+16"
-      },
-      {
-        "title": "Stranger Things",
-        "image": "/series/strangerthings.png",
-        "description": "Stranger Things combina ciencia ficción y nostalgia ochentera en una historia donde un grupo de niños se enfrenta a fenómenos paranormales y monstruos provenientes de otra dimensión, conocida como 'El Otro Lado'.",
-        "releaseDate": "2016",
-        "genre": "Drama, Ciencia Ficción, Misterio",
-        "rating": "+13"
-      }
-    ],
-  };
+  const API_KEY = "fe327da4"; // Reemplaza con tu API Key de OMDb
+  const categories = ["Comedy", "Drama", "Action", "Sci-Fi", "Fantasy"];
 
-  const seriesList = [
-    {
-      "title": "Breaking Bad",
-      "image": "/series/breakingbad.jpg",
-      "description": "Breaking Bad es una serie dramática que sigue la transformación de Walter White, un profesor de química convertido en narcotraficante, después de ser diagnosticado con cáncer. A medida que se involucra en el mundo de las drogas, su vida  y la de su familia se ven profundamente afectadas. La serie destaca por su narrativa intensa, desarrollo de personajes complejos, y un enfoque en temas como la ambición, la moralidad y la consecuencia de las decisiones. Protagonizada por Bryan Cranston y Aaron Paul, es considerada una de las mejores series de la televisión.",
-      "releaseDate": "2008",
-      "genre": "Drama, Thriller, Crimen",
-      "rating": "+16"
-    },
-    {
-      "title": "The Office",
-      "image": "/series/theoffice.png",
-      "description": "The Office es una comedia de estilo documental que sigue la vida cotidiana de los empleados de Dunder Mifflin, una empresa de papel. Con momentos incómodos y personajes entrañables, la serie se ha convertido en un clásico moderno.",
-      "releaseDate": "2005",
-      "genre": "Comedia",
-      "rating": "Todo público"
-    },
-    {
-      "title": "The Big Bang Theory",
-      "image": "/series/bigbang.png",
-      "description": "The Big Bang Theory es una comedia que narra las vidas de un grupo de amigos nerds y su interacción con el mundo social, especialmente con Penny, su vecina y opuesta en muchos sentidos.",
-      "releaseDate": "2007",
-      "genre": "Comedia",
-      "rating": "Todo público"
-    },
-    {
-      "title": "Better Call Saul",
-      "image": "/series/bettercallsaul.png",
-      "description": "Better Call Saul es una precuela de Breaking Bad que narra la evolución de Jimmy McGill, un abogado de poca monta que se convierte en el inescrupuloso Saul Goodman. La serie combina drama legal con momentos de humor negro.",
-      "releaseDate": "2015",
-      "genre": "Drama, Crimen",
-      "rating": "+16"
-    },
-    {
-      "title": "Peaky Blinders",
-      "image": "/series/peakyblinders.png",
-      "description": "Peaky Blinders sigue las hazañas de la familia Shelby en el Birmingham de la posguerra. Conocidos por sus trajes elegantes y su brutalidad, los Shelby buscan expandir su imperio mientras enfrentan enemigos y traiciones.",
-      "releaseDate": "2013",
-      "genre": "Drama, Crimen, Histórico",
-      "rating": "+16"
-    },
-    {
-      "title": "Friends",
-      "image": "/series/friends.png",
-      "description": "Friends es una icónica comedia que sigue las vidas de seis amigos en Nueva York. A lo largo de diez temporadas, exploran relaciones, carreras y la complejidad de la amistad adulta.",
-      "releaseDate": "1994",
-      "genre": "Comedia, Romance",
-      "rating": "Todo público"
-    },
-    {
-      "title": "Stranger Things",
-      "image": "/series/strangerthings.png",
-      "description": "Stranger Things combina ciencia ficción y nostalgia ochentera en una historia donde un grupo de niños se enfrenta a fenómenos paranormales y monstruos provenientes de otra dimensión, conocida como 'El Otro Lado'.",
-      "releaseDate": "2016",
-      "genre": "Drama, Ciencia Ficción, Misterio",
-      "rating": "+13"
-    }
-  ];
+  useEffect(() => {
+    const fetchSeriesByCategory = async () => {
+      const lists = {};
+
+      for (const category of categories) {
+        try {
+          const response = await fetch(
+            `https://www.omdbapi.com/?apikey=${API_KEY}&s=${category}&type=series`
+          );
+          const result = await response.json();
+
+          if (result.Response === "True") {
+            lists[category] = result.Search.sort(() => Math.random() - 0.5).slice(0, 10);
+          } else {
+            lists[category] = [];
+          }
+        } catch (error) {
+          console.error(`Error al obtener series para ${category}:`, error);
+          lists[category] = [];
+        }
+      }
+
+      setSeriesLists(lists);
+      setLoading(false);
+    };
+
+    fetchSeriesByCategory();
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -164,31 +52,15 @@ const SeriesScreen = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleNext = (carousel) => {
-    const itemList =
-      carousel === "series" ? seriesList : seriesByGenre[carousel];
-    setCarouselStates((prev) => ({
-      ...prev,
-      [carousel]:
-        prev[carousel] + 1 < Math.ceil(itemList.length / visibleItems)
-          ? prev[carousel] + 1
-          : 0,
-    }));
-  };
-
-  const handlePrev = (carousel) => {
-    const itemList =
-      carousel === "series" ? seriesList : seriesByGenre[carousel];
-    setCarouselStates((prev) => ({
-      ...prev,
-      [carousel]:
-        (prev[carousel] - 1 + Math.ceil(itemList.length / visibleItems)) %
-        Math.ceil(itemList.length / visibleItems),
-    }));
-  };
+  if (loading) {
+    return (
+      <div className="text-white text-center mt-10">Cargando contenido...</div>
+    );
+  }
 
   return (
     <div className="bg-azulprincipal text-white">
+      {/* Imagen y texto destacado */}
       <div
         className="relative h-[60vh] bg-cover bg-top"
         style={{ backgroundImage: "url('/series/theOffice2.jpg')" }}
@@ -202,33 +74,26 @@ const SeriesScreen = () => {
         </div>
       </div>
 
-      <div className="my-6">
-        <h2 className="text-4xl font-semibold mb-6 ml-8">Series para ti</h2>
-        <Carousel
-          items={seriesList}
-          visibleItems={visibleItems}
-          page={carouselStates.series}
-          onNext={() => handleNext("series")}
-          onPrev={() => handlePrev("series")}
-        />
-      </div>
-
-      {Object.entries(seriesByGenre).map(([genre, items]) => (
-        <div key={genre} className="my-6">
-          <h2 className="text-4xl font-semibold mb-6 ml-8 capitalize">
-            {genre === "drama"
-              ? "Drama"
-              : genre === "comedy"
-              ? "Comedia"
-              : "Thriller"}
-          </h2>
-          <Carousel
-            items={items}
-            visibleItems={visibleItems}
-            page={carouselStates[genre]}
-            onNext={() => handleNext(genre)}
-            onPrev={() => handlePrev(genre)}
-          />
+      {/* Carruseles por categoría */}
+      {categories.map((category) => (
+        <div className="my-6" key={category}>
+          <h2 className="text-4xl font-semibold mb-6 ml-8">{category}</h2>
+          {seriesLists[category]?.length === 0 ? (
+            <div className="text-white text-center">
+              No se encontraron series en la categoría {category}.
+            </div>
+          ) : (
+            <Carousel
+              items={seriesLists[category].map((item) => ({
+                ...item,
+                imageUrl: item.Poster,
+                title: item.Title,
+                year: item.Year,
+                imdbID: item.imdbID,
+              }))}
+              visibleItems={visibleItems}
+            />
+          )}
         </div>
       ))}
 
