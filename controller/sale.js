@@ -1,5 +1,6 @@
 const saleService = require("../service/sale");
 const emailService = require("../service/email");
+const emailTemplate = require('../models/templete')
 
 exports.getsaleTop10 = async (req, res) => {
     try {
@@ -31,7 +32,7 @@ exports.postAddSale = async (req, res) => {
         //Utilizacion del servicio de libreria
         const response = await saleService.addSale(period, idMovie, price, idUser);
         //Utilizacion de servicio de correo electronico
-        emailService.sendMail(email, 'Proceso de MovieStar', "Se a realizado una transaccion exitosa")
+        emailService.sendMail(email, 'Proceso de MovieStar', emailTemplate.pucherse(email,price,period,idMovie))
         //Respuesta en json
         res.json(response);
     } catch (error) {
@@ -48,6 +49,20 @@ exports.postclientCheck = async (req, res) => {
 
         //Utilizacion del servicio de libreria
         const response = await saleService.clientCheck(idMovie,idUser);
+
+        //Respuesta en json
+        res.json(response);
+    } catch (error) {
+        //Respuesta de error
+        res.status(500).json({ error: error.message });
+    }
+};
+exports.getStatistics = async (req, res) => {
+    try {
+        const idMovie = req.params.id;
+        if(!idMovie) throw new Error('Faltan algunos datos');
+        //Utilizacion del servicio de libreria
+        const response = await saleService.statistics(idMovie);
 
         //Respuesta en json
         res.json(response);

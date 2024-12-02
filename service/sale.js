@@ -87,3 +87,31 @@ exports.clientCheck = async (idMovie,idUser) => {
         }
     });
 };
+exports.statistics =  async (idMovie) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //Conexion a la base de datos
+            const db = await mysql.connect();
+            //Query de la base de datos con un proceso almacenado
+            await db.execute(`select s.date_start as date , sum(price) as total from sale s where s.id_movie = '${idMovie}' group by s.date_start;`, (err, rows) => {
+                //Comprobaion de errores
+                if (err) throw err
+                //Verificacion de proceso
+                if (rows.length > 0) {
+                    //Respuesta del query
+                    resolve(rows);
+                    return
+                }
+                //Error por si no existe usuario
+                resolve({ "error": "No existe ningun dato" });
+                return
+
+            });
+
+
+        }
+        catch (error) {
+            reject(error);
+        }
+    });
+};
