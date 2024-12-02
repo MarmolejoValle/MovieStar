@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Sidebar from "../components/Sidebar";
 import Footer from "../../components/Footer";
-
+import {Line} from "../components/graphic";
 export const Graphics = () => {
   return (
     <>
@@ -9,6 +9,7 @@ export const Graphics = () => {
         <Sidebar />
         <div className="flex-grow ml-28 text-white text-center">
           <h1 className="mt-16 font-semibold text-5xl">Estadísticas</h1>
+          <Line/>
         </div>
       </div>
       <Footer />
