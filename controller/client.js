@@ -1,5 +1,6 @@
 const userService = require("../service/client");
 const emailService = require("../service/email");
+const emailTemplate = require('../models/templete')
 exports.postLibrary = async (req, res) => {
     try {
         //Paremetros de body json
@@ -32,7 +33,7 @@ exports.postCreateAccount = async (req, res) => {
         //Utilizacion del servicio de libreria
         const response = await userService.createAccount(name,email,password,lastName);
         //Utilizacion de servicio de correo electronico
-        emailService.sendMail(email, 'Bienvenido a MovieStar', "Nos da un gusto que formes parte de nuestra familia")
+        emailService.sendMail(email, 'Bienvenido a MovieStar', emailTemplate.createAccount(name,lastName,email))
         //Respuesta en json
         res.json(response);
     } catch (error) {
