@@ -3,9 +3,10 @@ const emailService = require("../service/email");
 
 exports.getsaleTop10 = async (req, res) => {
     try {
-       
+        const pag = req.params.pag;
+        if(!pag) throw new Error('Faltan algunos datos');
         //Utilizacion del servicio de libreria
-        const response = await saleService.salesTop10();
+        const response = await saleService.salesTop10(pag);
 
         //Respuesta en json
         res.json(response);

@@ -1,12 +1,15 @@
 const mysql = require('../config/mysql')
 
-exports.salesTop10 = async () => {
+exports.salesTop10 = async (pag) => {
     return new Promise(async (resolve, reject) => {
         try {
+            const pagEnd = pag * 10;
+            const pagStar = pagEnd - 10;
+
             //Conexion a la base de datos
             const db = await mysql.connect();
             //Query de la base de datos con una view
-            await db.execute(`select * from sales_total_movies_desc10;`, (err, rows) => {
+            await db.execute(`SELECT s.id_movie ,count(*)  as sales ,sum(s.price) as total FROM sale s GROUP BY s.id_movie order by sales desc limit ${pagStar},${pagEnd};`, (err, rows) => {
                 //Comprobaion de errores
                 if (err) throw err
                 //Comprobacin de elementos 
@@ -34,7 +37,7 @@ exports.addSale = async (period, idMovie, price, idUser) => {
             //Conexion a la base de datos
             const db = await mysql.connect();
             //Query de la base de datos con un proceso almacenado
-            await db.execute(`CALL addSale('${period}',${idMovie},${price},${idUser});`, (err, rows) => {
+            await db.execute(`CALL addSale('${period}','${idMovie}',${price},${idUser});`, (err, rows) => {
                 //Comprobaion de errores
                 if (err) throw err
                 //Verificacion de proceso
