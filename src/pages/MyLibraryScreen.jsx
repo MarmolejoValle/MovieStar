@@ -9,72 +9,116 @@ const MyLibraryScreen = () => {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [moviePage, setMoviePage] = useState(0);
+  const [seriesPage, setSeriesPage] = useState(0);
 
+  // **Carga de datos**
   useEffect(() => {
     const fetchLibrary = async () => {
       const userId = localStorage.getItem("userId");
-      if (!userId) {
-        setError("No se encontró el ID del usuario. Inicia sesión nuevamente.");
+      if (!userId || isNaN(userId)) {
+        setError("No se encontró un ID de usuario válido. Inicia sesión nuevamente.");
         setLoading(false);
         return;
       }
-
+  
       try {
         const response = await fetch(
           "http://192.168.1.234:2003/api/client/library",
           {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ idUser: parseInt(userId) }),
           }
         );
-
-        if (response.ok) {
-          const rentals = await response.json();
-
-          // Fetch detalles de cada película/serie desde OMDb
-          const details = await Promise.all(
-            rentals.map(async (rental) => {
+  
+        const responseText = await response.text();
+        console.log("Response:", responseText);
+  
+        if (!response.ok) {
+          throw new Error(`Error del servidor: ${response.status}`);
+        }
+  
+        const rentals = JSON.parse(responseText);
+  
+        const details = await Promise.all(
+          rentals.map(async (rental) => {
+            try {
               const omdbResponse = await fetch(
                 `https://www.omdbapi.com/?i=${rental.id_movie}&apikey=fe327da4`
               );
-
+  
               if (omdbResponse.ok) {
                 const movieData = await omdbResponse.json();
+                if (!movieData || movieData.Response === "False") {
+                  console.warn(`OMDB no encontró datos para: ${rental.id_movie}`);
+                  return null;
+                }
                 return {
                   ...movieData,
-                  dateEnd: rental.date_end, // Fecha de fin de renta
-                  dateStart: rental.date_start, // Fecha de inicio de renta
-                  price: rental.price, // Precio de la renta
+                  dateEnd: rental.date_end,
+                  dateStart: rental.date_start,
+                  price: rental.price,
                 };
               }
+              console.warn(`OMDB falló para: ${rental.id_movie}`);
               return null;
-            })
-          );
-
-          // Filtrar nulos y clasificar por tipo
-          const movies = details.filter(
-            (item) => item && item.Type === "movie"
-          );
-          const series = details.filter(
-            (item) => item && item.Type === "series"
-          );
-
-          setLibrary({ movies, series });
-        } else {
-          setError("Error al obtener la biblioteca del usuario.");
-        }
+            } catch (err) {
+              console.error(`Error al obtener datos de OMDB: ${err.message}`);
+              return null;
+            }
+          })
+        );
+  
+        const movies = details.filter((item) => item && item.Type === "movie");
+        const series = details.filter((item) => item && item.Type === "series");
+  
+        setLibrary({ movies, series });
       } catch (err) {
-        setError("Error de conexión con el servidor.", err);
+        setError(err.message || "Error de conexión con el servidor.");
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchLibrary();
   }, []);
+  
+
+  // **Validar elementos válidos**
+  const validateItems = (items) => {
+    return items.filter(
+      (item) => item.imdbID && item.Poster && item.Title
+    );
+  };
+
+  const validMovies = validateItems(library.movies);
+  const validSeries = validateItems(library.series);
+
+  // **Manejo de paginación**
+  const handleNextMoviePage = () => {
+    if (moviePage < Math.ceil(validMovies.length / 5) - 1) {
+      setMoviePage(moviePage + 1);
+    }
+  };
+
+  const handlePrevMoviePage = () => {
+    if (moviePage > 0) {
+      setMoviePage(moviePage - 1);
+    }
+  };
+
+  const handleNextSeriesPage = () => {
+    if (seriesPage < Math.ceil(validSeries.length / 5) - 1) {
+      setSeriesPage(seriesPage + 1);
+    }
+  };
+
+  const handlePrevSeriesPage = () => {
+    if (seriesPage > 0) {
+      setSeriesPage(seriesPage - 1);
+    }
+  };
 
   return (
     <div className="bg-azulprincipal text-white pt-36">
@@ -91,11 +135,17 @@ const MyLibraryScreen = () => {
           <p className="text-xl text-center text-red-500">{error}</p>
         ) : (
           <>
-            {/* Section for Movies */}
+            {/* Carrusel de Películas */}
             <div className="py-6">
               <h2 className="text-4xl font-semibold mb-6 ml-8">Películas</h2>
-              {library.movies.length > 0 ? (
-                <Carousel items={library.movies} visibleItems={5} page={0} />
+              {validMovies.length > 0 ? (
+                <Carousel
+                  items={validMovies}
+                  visibleItems={5} // Número de elementos visibles
+                  page={moviePage}
+                  onNext={handleNextMoviePage}
+                  onPrev={handlePrevMoviePage}
+                />
               ) : (
                 <p className="text-xl text-left mt-4 ml-16">
                   No tienes películas disponibles.
@@ -103,11 +153,17 @@ const MyLibraryScreen = () => {
               )}
             </div>
 
-            {/* Section for Series */}
+            {/* Carrusel de Series */}
             <div className="py-6">
               <h2 className="text-4xl font-semibold mb-6 ml-8">Series</h2>
-              {library.series.length > 0 ? (
-                <Carousel items={library.series} visibleItems={5} page={0} />
+              {validSeries.length > 0 ? (
+                <Carousel
+                  items={validSeries}
+                  visibleItems={5} // Número de elementos visibles
+                  page={seriesPage}
+                  onNext={handleNextSeriesPage}
+                  onPrev={handlePrevSeriesPage}
+                />
               ) : (
                 <p className="text-xl text-left mt-4 ml-16">
                   No tienes series disponibles.
