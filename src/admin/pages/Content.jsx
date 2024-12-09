@@ -12,7 +12,7 @@ export const Content = () => {
   useEffect(() => {
     const fetchTopSales = async () => {
       try {
-        // Obtener los 10 productos más vendidos desde el primer endpoint
+        // Obtener los 10 productos más vendidos desde el primer endpointe
         const response = await fetch(
           "http://192.168.1.234:2003/api/sale/all/1"
         );
@@ -26,6 +26,8 @@ export const Content = () => {
               `https://www.omdbapi.com/?i=${sale.id_movie}&apikey=${OMDB_API_KEY}`
             );
             const omdbData = await omdbResponse.json();
+            console.log(omdbData);
+            
 
             return {
               total: sale.total || 0, // Default a 0 si no existe
