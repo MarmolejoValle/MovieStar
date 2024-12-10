@@ -1,4 +1,9 @@
 const promotionService = require("../service/promotion");
+const emailService = require("../service/email");
+const emailTemplate = require('../models/templete');
+const clientService = require("../service/client");
+
+
 exports.postaddPromotion = async (req, res) => {
     try {
         //Paremetros de body json
@@ -14,7 +19,10 @@ exports.postaddPromotion = async (req, res) => {
         if (!dateStart || !dateEnd || !discount || !idMovie || !saleType) throw new Error('Faltan algunos datos')
 
         //Utilizacion del servicio para añadir una promocion
-        const response = await promotionService.addPromotion(dateStart,dateEnd,discount,idMovie,saleType,name);
+        const response = await promotionService.addPromotion(dateStart, dateEnd, discount, idMovie, saleType, name);
+
+        console.log(await clientService.addEmails())
+        emailService.sendMail(email, 'Proceso de MovieStar', emailTemplate.pucherse(email, price, period, idMovie))
 
         //Respuesta en json
         res.json(response);
@@ -25,7 +33,7 @@ exports.postaddPromotion = async (req, res) => {
 };
 exports.getviewAllPromotions = async (req, res) => {
     try {
-      
+
         //Utilizacion del servicio para ver las promociones actuales
         const response = await promotionService.viewAllActive();
 
@@ -43,7 +51,7 @@ exports.postdeletePromotion = async (req, res) => {
 
 
         //Comprobacion de valor 
-        if (!id ) throw new Error('Faltan algunos datos')
+        if (!id) throw new Error('Faltan algunos datos')
 
         //Utilizacion del servicio para añadir una promocion
         const response = await promotionService.deletePromotion(id);

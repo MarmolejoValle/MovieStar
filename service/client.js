@@ -29,7 +29,7 @@ exports.library = async (idUser) => {
         }
     });
 };
-exports.createAccount = (name,email,password,lastName) => {
+exports.createAccount = (name, email, password, lastName) => {
     return new Promise(async (resolve, reject) => {
         try {
             //Conexion a la base de datos
@@ -46,6 +46,34 @@ exports.createAccount = (name,email,password,lastName) => {
                 }
                 //Error por si no existe usuario
                 resolve({ "error": "Hubo un error al crear el usuario" });
+                return
+
+            });
+
+
+        }
+        catch (error) {
+            reject(error);
+        }
+    });
+};
+exports.addEmails = async () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //Conexion a la base de datos
+            const db = await mysql.connect();
+            //Query de la base de datos con una view
+            await db.execute(`SELECT email FROM user WHERE fk_role_user  = 1`, (err, rows) => {
+                //Comprobaion de errores
+                if (err) throw err
+                //Comprobacin de elementos 
+                if (rows.length > 0) {
+                    //Respuesta del query
+                    resolve(rows);
+                    return
+                }
+                //Error por si no existe usuario
+                resolve({ "error": "No existe usuario" });
                 return
 
             });
