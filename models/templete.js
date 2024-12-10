@@ -1,5 +1,5 @@
-exports.pucherse = (email,price,period,idMovie)=>{
-    return`<!DOCTYPE html>
+exports.pucherse = (email, price, period, idMovie) => {
+  return `<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -127,8 +127,8 @@ exports.pucherse = (email,price,period,idMovie)=>{
 </html>
 `;
 }
-exports.createAccount=(name,lastName,email)=>{
-    return `<!DOCTYPE html>
+exports.createAccount = (name, lastName, email) => {
+  return `<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -231,7 +231,7 @@ exports.createAccount=(name,lastName,email)=>{
         <div class="message">
           <h3>Detalles de tu cuenta</h3>
           <p><strong>Correo electrónico:</strong> ${email}</p>
-          <p><strong>Usuario:</strong> ${name,lastName} </p>
+          <p><strong>Usuario:</strong> ${name, lastName} </p>
         </div>
 
 
@@ -250,4 +250,125 @@ exports.createAccount=(name,lastName,email)=>{
 </body>
 </html>
 `;
+}
+exports.promotion = (dateStart, dateEnd, discount, name) => {
+  return `
+  <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promoción Especial</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f6f6f6;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border: 1px solid #dddddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: #13161A;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .promo-banner {
+            width: 100%;
+            height: auto;
+            position: relative;
+        }
+        .discount-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ffffff;
+            font-size: 150px; 
+            font-weight: bold; 
+            text-shadow: 
+                5px 5px 10px rgba(0, 0, 0, 0.8),  
+                -5px -5px 15px rgba(0, 0, 0, 0.6), 
+                0px 5px 10px rgba(0, 0, 0, 0.5),  
+                0px -5px 10px rgba(0, 0, 0, 0.5), 
+                2px 2px 15px rgba(0, 0, 0, 0.5);  
+            letter-spacing: 4px; 
+            text-align: center;
+            z-index: 10; 
+        }
+        .content {
+            padding: 20px;
+            text-align: center;
+        }
+        .content h2 {
+            color: #333333;
+            margin: 10px 0;
+        }
+        .content p {
+            color: #555555;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .cta-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #A62940;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .cta-button:hover {
+            background-color: #2c8c46;
+        }
+        .footer {
+            background-color: #f1f1f1;
+            text-align: center;
+            padding: 10px;
+            font-size: 12px;
+            color: #888888;
+        }
+        .footer a {
+            color: #4285f4;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>¡Gran Promoción!</h1>
+        </div>
+
+        <div style="position: relative;">
+            <img src="https://img.freepik.com/fotos-premium/marco-gran-venta-fondo-rojo-brillante-esferas-porcentajes-3d-render_521642-141.jpg" alt="Banner de Promoción" class="promo-banner">
+            <div class="discount-overlay">50%</div>
+        </div>
+
+        <div class="content">
+            <h2>¡${name} !  </h2>
+            <p>Obtén hasta un <strong>${discount * 100} % de descuento</strong> en productos seleccionados. Esta oferta estará disponible por tiempo limitado (${dateStart} - ${dateEnd}), ¡así que aprovecha ahora!</p>
+        </div>
+
+        <div class="footer">
+            <p>Recibiste este correo porque eres un cliente valioso de nuestra marca.</p>
+        </div>
+    </div>
+</body>
+</html>
+
+  `;
 }
