@@ -107,8 +107,6 @@ const MyLibraryScreen = () => {
 
         {loading ? (
           <p className="text-xl text-center">Cargando...</p>
-        ) : error ? (
-          <p className="text-xl text-center text-red-500">{error}</p>
         ) : (
           <>
             {/* Carrusel de Contenido */}

@@ -131,7 +131,7 @@ const DetailScreen = () => {
 
     const payload = {
       period,
-      idMovie: title,
+      idMovie: id,
       price,
       idUser: userId,
       email,

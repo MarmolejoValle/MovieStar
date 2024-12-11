@@ -108,7 +108,7 @@ const Carousel = ({ items, visibleItems, page, onNext, onPrev }) => {
                 )}&rating=${encodeURIComponent(
                   item.imdbRating || "N/A"
                 )}&id=${encodeURIComponent(
-                  item.id || "N/A"
+                  item.id || item.imdbID
                 )}&name=${encodeURIComponent(item.Title || "N/A")}${item.date_end
                     ? `&dateEnd=${encodeURIComponent(item.dateEnd)}`
                     : ""

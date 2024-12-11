@@ -40,7 +40,8 @@ const HomeScreen = () => {
               const movieResponse = await fetch(
                 `https://www.omdbapi.com/?apikey=${API_KEY}&i=${promo.id_movie}`
               );
-              const movieData = await movieResponse.json();              
+              const movieData = await movieResponse.json();
+                          
 
 
               if (movieData.Response === "True") {
@@ -129,6 +130,7 @@ const HomeScreen = () => {
       setMoviesList(moviesData);
       setGenreLists(genreData);
       setLoading(false);
+      
     };
 
     fetchContent();
@@ -208,7 +210,6 @@ const HomeScreen = () => {
             imageUrl: item.Poster,
             title: item.Title,
             year: item.Year,
-            imdbID: item.imdbID,
           }))}
           visibleItems={visibleItems}
           page={seriesPage}
@@ -234,7 +235,6 @@ const HomeScreen = () => {
             imageUrl: item.Poster,
             title: item.Title,
             year: item.Year,
-            imdbID: item.imdbID,
           }))}
           visibleItems={visibleItems}
           page={moviesPage}
@@ -261,7 +261,6 @@ const HomeScreen = () => {
               imageUrl: item.Poster,
               title: item.Title,
               year: item.Year,
-              imdbID: item.imdbID,
             }))}
             visibleItems={visibleItems}
           />
