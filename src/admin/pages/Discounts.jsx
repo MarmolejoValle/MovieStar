@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Footer from "../../components/Footer";
+import { IP_API } from "../../../config";
 
 export const Discounts = () => {
   const [showAddForm, setShowAddForm] = useState(false);
@@ -15,7 +16,7 @@ export const Discounts = () => {
     const fetchPromotions = async () => {
       try {
         const response = await fetch(
-          "http://192.168.1.234:2003/api/promotion/viewAll"
+          `${IP_API}/api/promotion/viewAll`
         );
         if (!response.ok) {
           throw new Error("Error al obtener promociones");
@@ -34,13 +35,13 @@ export const Discounts = () => {
   const handleDeletePromotion = async (id) => {
     try {
       const response = await fetch(
-        "http://192.168.1.234:2003/api/promotion/delete",
+        `${IP_API}/api/promotion/delete`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ id }), 
+          body: JSON.stringify({ id }),
         }
       );
 
@@ -86,7 +87,7 @@ export const Discounts = () => {
 
     try {
       const response = await fetch(
-        "http://192.168.1.234:2003/api/promotion/add",
+        `${IP_API}/api/promotion/add`,
         {
           method: "POST",
           headers: {
@@ -152,35 +153,41 @@ export const Discounts = () => {
           </div>
 
           {/* Tarjetas de promociones */}
+          {/* Tarjetas de promociones */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10 px-6">
-            {promotions.map((promo) => (
-              <div
-                key={promo.id}
-                className="bg-gray-800 text-white p-6 rounded-lg shadow-lg relative group"
-              >
-                <h2 className="text-lg font-semibold mb-2">{promo.name}</h2>
-                <p className="text-sm text-gray-400">
-                  Película ID: {promo.id_movie}
-                </p>
-                <p className="text-sm text-gray-400">
-                  Tipo: {promo.saleType === "1" ? "Renta" : "Compra"}
-                </p>
-                <p className="text-sm text-gray-400">
-                  Desde: {promo.dateStart} hasta: {promo.dateEnd}
-                </p>
-                <button
-                  className="absolute top-3 right-3 bg-red-500 text-white rounded-full p-2 shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
-                  onClick={() => handleDeletePromotion(promo.id)}
+            {promotions.length > 0 ? (
+              promotions.map((promo) => (
+                <div
+                  key={promo.id}
+                  className="bg-gray-800 text-white p-6 rounded-lg shadow-lg relative group"
                 >
-                  ✕
-                </button>
-              </div>
-            ))}
+                  <h2 className="text-lg font-semibold mb-2">{promo.name}</h2>
+                  <p className="text-sm text-gray-400">Película ID: {promo.id_movie}</p>
+                  <p className="text-sm text-gray-400">
+                    Tipo: {promo.saleType === "1" ? "Renta" : "Compra"}
+                  </p>
+                  <p className="text-sm text-gray-400">
+                    Desde: {promo.dateStart} hasta: {promo.dateEnd}
+                  </p>
+                  <button
+                    className="absolute top-3 right-3 bg-red-500 text-white rounded-full p-2 shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
+                    onClick={() => handleDeletePromotion(promo.id)}
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))
+            ) : (
+              <p className="text-left text-gray-400 text-lg">
+                No hay promociones disponibles en este momento.
+              </p>
+            )}
           </div>
+
 
           {/* Formulario para añadir promociones */}
           {showAddForm && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 overflow-auto">
               <div className="bg-gray-900 text-white p-8 rounded-lg shadow-lg w-full max-w-lg">
                 <h2 className="text-2xl font-bold mb-4">Añadir Promoción</h2>
                 <form onSubmit={handleAddSubmit}>
@@ -211,9 +218,8 @@ export const Discounts = () => {
                       {movies.map((movie) => (
                         <li
                           key={movie.id}
-                          className={`p-2 cursor-pointer hover:bg-gray-700 ${
-                            selectedMovie?.id === movie.id ? "bg-gray-700" : ""
-                          }`}
+                          className={`p-2 cursor-pointer hover:bg-gray-700 ${selectedMovie?.id === movie.id ? "bg-gray-700" : ""
+                            }`}
                           onClick={() => setSelectedMovie(movie)}
                         >
                           {movie.title}

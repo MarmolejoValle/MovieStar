@@ -1,0 +1,1 @@
+export const IP_API = "http://192.168.110.56:2003";

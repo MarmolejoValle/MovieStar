@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import Carousel from "../components/Carousel";
+import { IP_API } from "../../config";
 
 const MyLibraryScreen = () => {
-  const [library, setLibrary] = useState({
-    movies: [],
-    series: [],
-  });
+  const [library, setLibrary] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [moviePage, setMoviePage] = useState(0);
-  const [seriesPage, setSeriesPage] = useState(0);
+  const [page, setPage] = useState(0);
 
   // **Carga de datos**
   useEffect(() => {
@@ -21,33 +18,27 @@ const MyLibraryScreen = () => {
         setLoading(false);
         return;
       }
-  
+
       try {
-        const response = await fetch(
-          "http://192.168.1.234:2003/api/client/library",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ idUser: parseInt(userId) }),
-          }
-        );
-  
-        const responseText = await response.text();
-        console.log("Response:", responseText);
-  
+        const response = await fetch(`${IP_API}/api/client/library`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ idUser: userId }),
+        });
+
         if (!response.ok) {
           throw new Error(`Error del servidor: ${response.status}`);
         }
-  
-        const rentals = JSON.parse(responseText);
-  
+
+        const rentals = await response.json();
+
         const details = await Promise.all(
           rentals.map(async (rental) => {
             try {
               const omdbResponse = await fetch(
                 `https://www.omdbapi.com/?i=${rental.id_movie}&apikey=fe327da4`
               );
-  
+
               if (omdbResponse.ok) {
                 const movieData = await omdbResponse.json();
                 if (!movieData || movieData.Response === "False") {
@@ -59,31 +50,29 @@ const MyLibraryScreen = () => {
                   dateEnd: rental.date_end,
                   dateStart: rental.date_start,
                   price: rental.price,
+                  typeDiscount: rental.type_discount,
                 };
               }
               console.warn(`OMDB falló para: ${rental.id_movie}`);
               return null;
             } catch (err) {
-              console.error(`Error al obtener datos de OMDB: ${err.message}`);
+              console.error(`Error al obtener datos de OMDB: ${err}`);
               return null;
             }
           })
         );
-  
-        const movies = details.filter((item) => item && item.Type === "movie");
-        const series = details.filter((item) => item && item.Type === "series");
-  
-        setLibrary({ movies, series });
+
+        const validContent = details.filter((item) => item !== null);
+        setLibrary(validContent);
       } catch (err) {
         setError(err.message || "Error de conexión con el servidor.");
       } finally {
         setLoading(false);
       }
     };
-  
+
     fetchLibrary();
   }, []);
-  
 
   // **Validar elementos válidos**
   const validateItems = (items) => {
@@ -92,31 +81,18 @@ const MyLibraryScreen = () => {
     );
   };
 
-  const validMovies = validateItems(library.movies);
-  const validSeries = validateItems(library.series);
+  const validLibrary = validateItems(library);
 
   // **Manejo de paginación**
-  const handleNextMoviePage = () => {
-    if (moviePage < Math.ceil(validMovies.length / 5) - 1) {
-      setMoviePage(moviePage + 1);
+  const handleNextPage = () => {
+    if (page < Math.ceil(validLibrary.length / 5) - 1) {
+      setPage(page + 1);
     }
   };
 
-  const handlePrevMoviePage = () => {
-    if (moviePage > 0) {
-      setMoviePage(moviePage - 1);
-    }
-  };
-
-  const handleNextSeriesPage = () => {
-    if (seriesPage < Math.ceil(validSeries.length / 5) - 1) {
-      setSeriesPage(seriesPage + 1);
-    }
-  };
-
-  const handlePrevSeriesPage = () => {
-    if (seriesPage > 0) {
-      setSeriesPage(seriesPage - 1);
+  const handlePrevPage = () => {
+    if (page > 0) {
+      setPage(page - 1);
     }
   };
 
@@ -135,38 +111,20 @@ const MyLibraryScreen = () => {
           <p className="text-xl text-center text-red-500">{error}</p>
         ) : (
           <>
-            {/* Carrusel de Películas */}
+            {/* Carrusel de Contenido */}
             <div className="py-6">
-              <h2 className="text-4xl font-semibold mb-6 ml-8">Películas</h2>
-              {validMovies.length > 0 ? (
+              <h2 className="text-4xl font-semibold mb-6 ml-8">Contenido Comprado</h2>
+              {validLibrary.length > 0 ? (
                 <Carousel
-                  items={validMovies}
+                  items={validLibrary}
                   visibleItems={5} // Número de elementos visibles
-                  page={moviePage}
-                  onNext={handleNextMoviePage}
-                  onPrev={handlePrevMoviePage}
+                  page={page}
+                  onNext={handleNextPage}
+                  onPrev={handlePrevPage}
                 />
               ) : (
                 <p className="text-xl text-left mt-4 ml-16">
-                  No tienes películas disponibles.
-                </p>
-              )}
-            </div>
-
-            {/* Carrusel de Series */}
-            <div className="py-6">
-              <h2 className="text-4xl font-semibold mb-6 ml-8">Series</h2>
-              {validSeries.length > 0 ? (
-                <Carousel
-                  items={validSeries}
-                  visibleItems={5} // Número de elementos visibles
-                  page={seriesPage}
-                  onNext={handleNextSeriesPage}
-                  onPrev={handlePrevSeriesPage}
-                />
-              ) : (
-                <p className="text-xl text-left mt-4 ml-16">
-                  No tienes series disponibles.
+                  No tienes contenido comprado disponible.
                 </p>
               )}
             </div>

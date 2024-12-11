@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Footer from "../../components/Footer";
 import CardRow from "../components/CardRow";
+import { IP_API } from "../../../config";
 
 export const Content = () => {
   const [isMovies, setIsMovies] = useState(true);
@@ -12,42 +13,64 @@ export const Content = () => {
   useEffect(() => {
     const fetchTopSales = async () => {
       try {
-        // Obtener los 10 productos más vendidos desde el primer endpointe
-        const response = await fetch(
-          "http://192.168.1.234:2003/api/sale/all/1"
-        );
+        const response = await fetch(`${IP_API}/api/sale/all/1`);
         const data = await response.json();
-
-        // Obtener detalles de cada película/serie desde OMDB
+  
         const enrichedData = await Promise.all(
           data.map(async (sale) => {
-            // Obtener la información de la película/serie desde OMDB usando el id_movie
-            const omdbResponse = await fetch(
-              `https://www.omdbapi.com/?i=${sale.id_movie}&apikey=${OMDB_API_KEY}`
-            );
-            const omdbData = await omdbResponse.json();
-            console.log(omdbData);
-            
-
-            return {
-              total: sale.total || 0, // Default a 0 si no existe
-              sales: sale.sales || 0, // Default a 0 si no existe
-              title: omdbData.Title || "Desconocido",
-              genre: omdbData.Genre || "Desconocido",
-              type: omdbData.Type || "Desconocido",
-              image: omdbData.Poster || "https://via.placeholder.com/150",
-            };
+            if (!sale.id_movie) {
+              console.warn(`ID de película faltante para venta:`, sale);
+              return {
+                total: sale.total || 0,
+                sales: sale.sales || 0,
+                title: "ID de película no disponible",
+                genre: "N/A",
+                type: "N/A",
+                image: "https://via.placeholder.com/150",
+              };
+            }
+        
+            try {
+              const omdbResponse = await fetch(
+                `https://www.omdbapi.com/?i=${sale.id_movie}&apikey=${OMDB_API_KEY}`
+              );
+              const omdbData = await omdbResponse.json();
+              return {
+                total: sale.total || 0,
+                sales: sale.sales || 0,
+                title: omdbData.Title || "Desconocido",
+                genre: omdbData.Genre || "Desconocido",
+                type: omdbData.Type || "Desconocido",
+                image: omdbData.Poster || "https://via.placeholder.com/150",
+              };
+            } catch (error) {
+              console.error(
+                `Error al obtener datos de OMDb para ${sale.id_movie}:`,
+                error
+              );
+              return {
+                total: sale.total || 0,
+                sales: sale.sales || 0,
+                title: "Error al cargar datos",
+                genre: "N/A",
+                type: "N/A",
+                image: "https://via.placeholder.com/150",
+              };
+            }
           })
         );
-
+        
+  
+        console.log("Enriched Data:", enrichedData); // Verifica el formato final de los datos
         setTopSales(enrichedData);
       } catch (error) {
         console.error("Error al cargar datos del API:", error);
       }
     };
-
+  
     fetchTopSales();
   }, []);
+  
 
   // Filtrar resultados por búsqueda
   const filteredData = topSales.filter((item) =>

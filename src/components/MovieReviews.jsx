@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { IP_API } from "../../config";
 
 export default function MovieReviews({ movieId }) {
   const [userRating, setUserRating] = useState(0);
@@ -9,7 +10,7 @@ export default function MovieReviews({ movieId }) {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await fetch("http://192.168.1.234:2003/api/review/viewForMovie", {
+        const response = await fetch(`${IP_API}/api/review/viewForMovie`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -59,7 +60,7 @@ export default function MovieReviews({ movieId }) {
     };
 
     try {
-      const response = await fetch("http://192.168.1.234:2003/api/review/add", {
+      const response = await fetch(`${IP_API}/api/review/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -73,7 +74,7 @@ export default function MovieReviews({ movieId }) {
         setUserReview("");
 
         // Recargar las reseñas después de enviar
-        const updatedReviews = await fetch("http://192.168.1.234:2003/api/review/viewForMovie", {
+        const updatedReviews = await fetch(`${IP_API}/api/review/viewForMovie`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
 import Carousel from "../components/Carousel";
+import { IP_API } from "../../config";
 
 const HomeScreen = () => {
   const [seriesList, setSeriesList] = useState([]);
@@ -22,7 +23,7 @@ const HomeScreen = () => {
     const fetchPromotions = async () => {
       try {
         const response = await fetch(
-          "http://192.168.1.234:2003/api/promotion/viewAll"
+          `${IP_API}/api/promotion/viewAll`
         );
         const result = await response.json();
 
@@ -39,12 +40,13 @@ const HomeScreen = () => {
               const movieResponse = await fetch(
                 `https://www.omdbapi.com/?apikey=${API_KEY}&i=${promo.id_movie}`
               );
-              const movieData = await movieResponse.json();
-              
+              const movieData = await movieResponse.json();              
+
 
               if (movieData.Response === "True") {
                 return {
                   ...promo,
+                  id: promo.id_movie,
                   title: movieData.Title,
                   poster: movieData.Poster,
                   year: movieData.Year,
@@ -176,11 +178,13 @@ const HomeScreen = () => {
         <Carousel
           items={promotionsList.map((promo) => ({
             ...promo,
-            Poster: promo.poster,
-            Title: promo.title,
-            Year: promo.year,
-            Discount: promo.discount,
-            typeDiscount: promo.type,
+            Poster: promo.poster || "https://via.placeholder.com/300",
+            Title: promo.title || "Sin título",
+            Year: promo.year || "Sin año",
+            Discount: promo.discount || 0,
+            typeDiscount: promo.type === "Compra" || promo.type === "Renta"
+              ? promo.type
+              : "Renta", // Valor predeterminado si no viene el tipo
           }))}
           visibleItems={visibleItems}
           page={promoPage}

@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import Button from "../components/Button";
 import InputField from "../components/InputField";
 import MovieReviews from "../components/MovieReviews";
+import { IP_API } from "../../config";
 
 const DetailScreen = () => {
   const { title } = useParams();
@@ -15,6 +16,7 @@ const DetailScreen = () => {
   const releaseDate = queryParams.get("releaseDate") || "N/A";
   const genre = queryParams.get("genre") || "No especificado";
   const rating = queryParams.get("rating") || "Sin clasificar";
+  const id = queryParams.get("id") || "N/A";
   const name = queryParams.get("name") || "Sin nombre";
   const discount = parseFloat(queryParams.get("discount")) || 0;
   const typeDiscount = queryParams.get("typeDiscount") || "Sin descuento";
@@ -37,22 +39,23 @@ const DetailScreen = () => {
       basePrice - timeDiscount,
       basePrice * 0.5
     ); // Precio mínimo 50%
-
+  
     // Verificar si el descuento aplica a esta opción
     const isRent = option.includes("Renta");
     const isPurchase = option.includes("Compra");
-
+  
     let finalPrice = priceAfterTimeDiscount;
-
+  
     if (
       (typeDiscount === "Renta" && isRent) ||
       (typeDiscount === "Compra" && isPurchase)
     ) {
       finalPrice = priceAfterTimeDiscount * (1 - discount / 100);
     }
-
+  
     return finalPrice;
   };
+  
 
   // Actualizar precios para cada opción
   const prices = {
@@ -64,41 +67,33 @@ const DetailScreen = () => {
   useEffect(() => {
     const checkPurchaseStatus = async () => {
       try {
-        const userId = localStorage.getItem("userId"); // Obtener el id del usuario desde localStorage
-        const idMovie = title; // Suponiendo que `title` es el id de la película
+        const userId = localStorage.getItem("userId");
+        const idMovie = title;
 
-        if (!userId || !idMovie) {
-          console.error("Faltan datos para verificar la compra.");
-          return;
-        }
+        console.log("Datos enviados al servidor:", { idUser: userId, id });
 
-        const response = await fetch(
-          "http://192.168.1.234:2003/api/sale/check",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              idMovie,
-              idUser: userId,
-            }),
-          }
-        );
+        const response = await fetch(`${IP_API}/api/sale/check`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ idUser: userId, idMovie: id }),
+        });
 
-        if (response.ok) {
-          const data = await response.json();
-          setIsPurchased(data.check); // Actualizar el estado con el valor de `check`
-        } else {
-          console.error("Error al verificar el estado de compra.");
-        }
+        const data = await response.json();
+        console.log("Respuesta del servidor:", data);
+
+        setIsPurchased(data.check || false);
       } catch (error) {
-        console.error("Error de conexión con el servidor:", error);
+        console.error("Error al verificar el estado de compra:", error);
+        setIsPurchased(false);
       }
     };
 
+    // Ejecutar la función una vez
     checkPurchaseStatus();
-  }, [title]);
+  }, [title]); // Solo depende de 'title' 
+  
 
   const handleTabChange = (tab) => {
     setFade(false);
@@ -143,7 +138,7 @@ const DetailScreen = () => {
     };
 
     try {
-      const response = await fetch("http://192.168.1.234:2003/api/sale/add", {
+      const response = await fetch(`${IP_API}/api/sale/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -183,39 +178,35 @@ const DetailScreen = () => {
           <div className="absolute bottom-5 left-5 flex w-2/6 justify-evenly">
             <h1
               onClick={() => handleTabChange("DETALLES")}
-              className={`cursor-pointer text-xl transition-all ${
-                activeTab === "DETALLES" ? "font-extrabold" : "text-white"
-              }`}
+              className={`cursor-pointer text-xl transition-all ${activeTab === "DETALLES" ? "font-extrabold" : "text-white"
+                }`}
             >
               DETALLES
             </h1>
-            {isPurchased && (
+            {(isPurchased || (typeDiscount === "Renta" && discount > 0)) && (
               <h1
                 onClick={() => handleTabChange("VER AHORA")}
-                className={`cursor-pointer text-xl transition-all ${
-                  activeTab === "VER AHORA" ? "font-extrabold" : "text-white"
-                }`}
+                className={`cursor-pointer text-xl transition-all ${activeTab === "VER AHORA" ? "font-extrabold" : "text-white"
+                  }`}
               >
                 VER AHORA
               </h1>
             )}
-            {isPurchased && (
+            {(isPurchased || (typeDiscount === "Renta" && discount > 0)) && (
               <h1
                 onClick={() => handleTabChange("RESEÑAS")}
-                className={`cursor-pointer text-xl transition-all ${
-                  activeTab === "RESEÑAS" ? "font-extrabold" : "text-white"
-                }`}
+                className={`cursor-pointer text-xl transition-all ${activeTab === "RESEÑAS" ? "font-extrabold" : "text-white"
+                  }`}
               >
                 RESEÑAS
               </h1>
             )}
           </div>
-          <hr className="border-t border-gray-300 mx-10" />
         </div>
+
         <div
-          className={`pt-8 px-16 transition-opacity duration-300 ${
-            fade ? "opacity-100" : "opacity-0"
-          }`}
+          className={`pt-8 px-16 transition-opacity duration-300 ${fade ? "opacity-100" : "opacity-0"
+            }`}
         >
           {isPurchased ? (
             activeTab === "DETALLES" ? (
@@ -273,9 +264,9 @@ const DetailScreen = () => {
                     </p>
                     <div className="font-bold text-xl mt-2">
                       {discount > 0 &&
-                      ((typeDiscount === "Renta" && option.includes("Renta")) ||
-                        (typeDiscount === "Compra" &&
-                          option.includes("Compra"))) ? (
+                        ((typeDiscount === "Renta" && option.includes("Renta")) ||
+                          (typeDiscount === "Compra" &&
+                            option.includes("Compra"))) ? (
                         <>
                           <span className="line-through text-gray-500 mr-2">
                             ${prices[option].toFixed(2)}
@@ -309,7 +300,7 @@ const DetailScreen = () => {
       {showForm && (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center">
           <form
-            className="bg-white p-10 rounded-3xl text-black shadow-xl w-1/3"
+            className="bg-white p-10 rounded-3xl text-black shadow-xl w-1/3 mt-28"
             onSubmit={handleFormSubmit}
           >
             <div className="mb-7">
@@ -391,11 +382,11 @@ const DetailScreen = () => {
                 <strong>Total a pagar:</strong> $
                 {(typeDiscount === "Renta" &&
                   selectedOption.includes("Renta")) ||
-                (typeDiscount === "Compra" && selectedOption.includes("Compra"))
+                  (typeDiscount === "Compra" && selectedOption.includes("Compra"))
                   ? calculatePrice(
-                      prices[selectedOption],
-                      selectedOption
-                    ).toFixed(2)
+                    prices[selectedOption],
+                    selectedOption
+                  ).toFixed(2)
                   : prices[selectedOption]?.toFixed(2)}
               </p>
               <p className="font-extralight text-sm text-rojosecundario">

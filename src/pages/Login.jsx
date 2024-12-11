@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import InputField from "../components/InputField";
 import Button from "../components/Button";
 import Footer from "../components/Footer";
+import { IP_API } from "../../config";
 
 const Login = ({ onRegister, onLogin }) => {
   const [isRegistering, setIsRegistering] = useState(false);
@@ -20,7 +21,7 @@ const Login = ({ onRegister, onLogin }) => {
 
     // Comentado el fetch para pruebas sin conexión
     try {
-      const response = await fetch("http://192.168.1.234:2003/api/user/login", {
+      const response = await fetch(`${IP_API}/api/user/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
@@ -73,7 +74,7 @@ const Login = ({ onRegister, onLogin }) => {
 
    
     try {
-      const response = await fetch("http://192.168.1.234:2003/api/client/createAccount", {
+      const response = await fetch(`${IP_API}/api/client/createAccount`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
