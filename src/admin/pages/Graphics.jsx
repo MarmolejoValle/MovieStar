@@ -85,7 +85,7 @@ const Graphics = () => {
         setChartLoading(true); // Muestra el estado de carga
         try {
           const response = await fetch(
-            `http://192.168.1.78:2003/api/sale/statistics/${selectedProduct.id}`
+            `${IP_API}/api/sale/statistics/${selectedProduct.id}`
           );
           const data = await response.json();
           console.log(data);
