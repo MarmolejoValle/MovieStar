@@ -1,82 +1,82 @@
 import React, { useEffect, useRef } from "react";
-import { createChart } from 'lightweight-charts';
+import { createChart } from "lightweight-charts";
 
 const chartOptions = {
-    layout: {
-        textColor: 'white',
-        background: { type: 'solid', color: '#13161A' },
-    },
+  layout: {
+    textColor: "white",
+    background: { type: "solid", color: "#13161A" },
+  },
 };
 
-export const Line = () => {
-    const chartContainer = useRef(null); // Referencia al contenedor del gráfico
-    const chartInstance = useRef(null);  // Referencia a la instancia del gráfico
+const Line = ({ data }) => {
+  const chartContainer = useRef(null); // Referencia al contenedor del gráfico
+  const chartInstance = useRef(null); // Referencia a la instancia del gráfico
+  const seriesInstance = useRef(null); // Referencia a la serie de datos
 
-    useEffect(() => {
-        // Si ya existe un gráfico, lo eliminamos
-        if (chartInstance.current) {
-            chartInstance.current.remove(); // Elimina el gráfico anterior
-        }
+  useEffect(() => {
+    if (chartContainer.current) {
+      // Crear el gráfico solo si no existe
+      if (!chartInstance.current) {
+        const chart = createChart(chartContainer.current, {
+          width: chartContainer.current.clientWidth,
+          height: chartContainer.current.clientHeight,
+          ...chartOptions,
+        });
 
-        if (chartContainer.current) {
-            const chart = createChart(chartContainer.current, chartOptions);
-            chartInstance.current = chart; // Guardamos la nueva instancia
+        chart.applyOptions({
+          rightPriceScale: {
+            scaleMargins: {
+              top: 0.4,
+              bottom: 0.15,
+            },
+          },
+          crosshair: {
+            horzLine: {
+              visible: false,
+              labelVisible: false,
+            },
+          },
+          grid: {
+            vertLines: {
+              visible: false,
+            },
+            horzLines: {
+              visible: false,
+            },
+          },
+        });
 
-            chart.applyOptions({
-                rightPriceScale: {
-                    scaleMargins: {
-                        top: 0.4,
-                        bottom: 0.15,
-                    },
-                },
-                crosshair: {
-                    horzLine: {
-                        visible: false,
-                        labelVisible: false,
-                    },
-                },
-                grid: {
-                    vertLines: {
-                        visible: false,
-                    },
-                    horzLines: {
-                        visible: false,
-                    },
-                },
-            });
+        // Crear la serie de área
+        const areaSeries = chart.addAreaSeries({
+          topColor: "#2962FF",
+          bottomColor: "rgba(41, 98, 255, 0.28)",
+          lineColor: "#2962FF",
+          lineWidth: 2,
+          crossHairMarkerVisible: false,
+        });
 
-            const areaSeries = chart.addAreaSeries({
-                topColor: '#2962FF',
-                bottomColor: 'rgba(41, 98, 255, 0.28)',
-                lineColor: '#2962FF',
-                lineWidth: 2,
-                crossHairMarkerVisible: false,
-            });
+        chartInstance.current = chart;
+        seriesInstance.current = areaSeries;
+      }
 
-            const data = [
-                { time: '2018-10-19', value: 26.19 },
-                { time: '2018-10-23', value: 25.83 },
-                { time: '2018-10-24', value: 25.78 },
-                { time: '2018-10-25', value: 25.82 },
-                { time: '2018-10-26', value: 25.81 },
-            ];
+      // Actualizar los datos de la serie
+      if (seriesInstance.current && data && data.length > 0) {
+        seriesInstance.current.setData(data);
+        chartInstance.current.timeScale().fitContent();
+      }
+    }
 
-            areaSeries.setData(data); // Asignamos los datos a la serie
-            chart.timeScale().fitContent();
-        }
+    // Función de limpieza
+    return () => {
+      if (chartInstance.current) {
+        chartInstance.current.remove();
+        chartInstance.current = null;
+        seriesInstance.current = null;
+      }
+    };
+  }, [data]); // Se ejecuta cada vez que cambian los datos
 
-        // Función de limpieza: Elimina el gráfico cuando el componente se desmonta
-        return () => {
-            if (chartInstance.current) {
-                chartInstance.current.remove();
-                chartInstance.current = null; // Asegura que no se acceda a un gráfico eliminado
-            }
-        };
-    }, []); // Este useEffect solo se ejecutará una vez al montar el componente
-
-    return (
-        <div ref={chartContainer} className=" w-full h-36"></div>
-    );
+  return <div ref={chartContainer} className="w-full h-full"></div>;
 };
 
 export default Line;
