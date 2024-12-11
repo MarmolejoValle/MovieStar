@@ -68,8 +68,10 @@ export const Discounts = () => {
       alert("Por favor, selecciona una película o serie.");
       return;
     }
-
+    
     const formData = new FormData(e.target);
+    console.log('formData: ',formData);
+    
     const price = parseFloat(formData.get("price"));
     if (price <= 0) {
       alert("El valor debe ser mayor a 0.");
@@ -77,6 +79,8 @@ export const Discounts = () => {
     }
 
     const newPromotion = {
+      movieName:selectedMovie.title,
+      url: selectedMovie.url,
       dateStart: formData.get("date_start"),
       dateEnd: formData.get("date_end"),
       discount: price,
@@ -123,9 +127,11 @@ export const Discounts = () => {
         `https://www.omdbapi.com/?apikey=fe327da4&s=${searchQuery}`
       );
       const data = await response.json();
+      console.log('RESPUESTA API: ', data);
+      
       if (data.Response === "True") {
         setMovies(
-          data.Search.map((movie) => ({ id: movie.imdbID, title: movie.Title }))
+          data.Search.map((movie) => ({ id: movie.imdbID, title: movie.Title, url: movie.Poster }))
         );
       } else {
         alert("No se encontraron resultados.");

@@ -14,6 +14,7 @@ const Navbar = ({ onLogout, onSearchMovies }) => {
 
   const handleLogout = () => {
     console.log("Sesion cerrada");
+    localStorage.removeItem('userId');
     onLogout();
     navigate("/login", { replace: true });
   };
